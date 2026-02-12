@@ -1,0 +1,9 @@
+/* From globals.css */
+/* Custom class for TariffsSection background */
+.tariffs-section-bg {
+  background-image: url('/images/workspace-with-office-tools-circle.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #f8fafc; /* Soft white background */
+}

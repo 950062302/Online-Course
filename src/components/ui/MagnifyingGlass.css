@@ -1,0 +1,12 @@
+/* From globals.css */
+/* Magnifier appear animation */
+@keyframes magnifier-appear {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

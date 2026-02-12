@@ -1,0 +1,82 @@
+/* From globals.css */
+  /* Custom Button Base Styles */
+  .custom-button-base {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #4a4a4a; /* Darker gray for contrast */
+    border: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+    cursor: pointer;
+    transition-duration: .3s;
+    overflow: hidden;
+    position: relative;
+    margin-right: 8px; /* Add some margin for spacing between buttons */
+  }
+
+  .custom-button-svg-icon {
+    width: 12px;
+    transition-duration: .3s;
+  }
+
+  .custom-button-svg-icon path {
+    fill: white;
+  }
+
+  .custom-button-base:hover {
+    width: 140px;
+    border-radius: 50px;
+    transition-duration: .3s;
+    align-items: center;
+  }
+
+  .custom-button-base:hover .custom-button-svg-icon {
+    width: 50px;
+    transition-duration: .3s;
+    transform: translateY(60%);
+  }
+
+  .custom-button-base::before {
+    position: absolute;
+    top: -20px;
+    color: white;
+    transition-duration: .3s;
+    font-size: 2px;
+  }
+
+  .custom-button-base:hover::before {
+    font-size: 13px;
+    opacity: 1;
+    transform: translateY(30px);
+    transition-duration: .3s;
+  }
+
+  /* Specific styles for Delete Button */
+  .custom-delete-button {
+    @apply custom-button-base; /* Inherit base styles */
+  }
+
+  .custom-delete-button:hover {
+    background-color: rgb(255, 69, 69); /* Red for delete */
+  }
+
+  .custom-delete-button::before {
+    content: "Delete";
+  }
+
+  /* Specific styles for Edit Button */
+  .custom-edit-button {
+    @apply custom-button-base; /* Inherit base styles */
+  }
+
+  .custom-edit-button:hover {
+    background-color: rgb(0, 123, 255); /* Blue for edit */
+  }
+
+  .custom-edit-button::before {
+    content: "Edit";
+  }

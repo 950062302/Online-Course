@@ -1,0 +1,47 @@
+/* From globals.css */
+  /* New Loading Spinner Styles */
+  .blob-loader {
+    width: 112px;
+    height: 112px;
+    display: grid;
+    background: #fff;
+    filter: blur(5.6px) contrast(10);
+    padding: 11.2px;
+    mix-blend-mode: darken;
+  }
+
+  .blob-loader:before,
+  .blob-loader:after {
+    content: "";
+    grid-area: 1/1;
+    width: 44.8px;
+    height: 44.8px;
+    background: var(--primary-hex); /* Changed to primary-hex */
+    animation: blob-rhf26m 2s infinite;
+  }
+
+  .blob-loader:after {
+    animation-delay: -1s;
+  }
+
+  @keyframes blob-rhf26m {
+    0% {
+      transform: translate(0, 0);
+    }
+
+    25% {
+      transform: translate(100%, 0);
+    }
+
+    50% {
+      transform: translate(100%, 100%);
+    }
+
+    75% {
+      transform: translate(0, 100%);
+    }
+
+    100% {
+      transform: translate(0, 0);
+    }
+  }

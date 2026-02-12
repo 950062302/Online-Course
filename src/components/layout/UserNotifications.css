@@ -1,0 +1,71 @@
+/* From Uiverse.io by barisdogansutcu */ 
+.button {
+  width: 180px; /* Adjusted width for better fit in header */
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 0px 15px;
+  background-color: #f8fafc; /* Light background to match header */
+  border-radius: 10px;
+  color: #1e293b; /* Dark text for light background */
+  border: none;
+  position: relative;
+  cursor: pointer;
+  transition-duration: 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+.dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  width: 15px;
+  height: 15px;
+  background-color: var(--primary-hex); /* Changed to primary-hex for the dot */
+  border-radius: 100%;
+}
+.bell {
+  width: 18px; /* Adjusted bell size */
+}
+
+.bell path {
+  fill: var(--primary-hex); /* Changed to primary-hex fill for the bell icon */
+}
+
+.arrow {
+  position: absolute;
+  right: 0;
+  width: 30px;
+  height: 100%;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1e293b; /* Dark arrow color */
+}
+
+.button:hover {
+  background-color: #e2e8f0; /* Slightly lighter background on hover */
+  transition-duration: 0.2s;
+}
+
+.button:hover .arrow {
+  animation: slide-right 1s infinite;
+}
+/* arrow animation */
+@keyframes slide-right {
+  0% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(-5px);
+  }
+}
+
+.button:active {
+  transform: translate(1px, 1px);
+  transition-duration: 0.2s;
+}
