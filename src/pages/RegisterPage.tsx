@@ -53,13 +53,6 @@ const RegisterPage: React.FC = () => {
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          data: {
-            username: username, // Pass username here
-            first_name: '',
-            last_name: '',
-          },
-        },
       });
 
       if (error) {

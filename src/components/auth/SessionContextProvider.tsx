@@ -199,15 +199,11 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
       setIsLoading(false);
     };
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(handleAuthStateChange);
-
     supabase.auth.getSession().then(async ({ data: { session: initialSession } }) => {
       await handleAuthStateChange('INITIAL_SESSION', initialSession);
     });
 
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
+    return () => {};
   }, [fetchUserProfile, BYPASS_AUTH]);
 
   return (
