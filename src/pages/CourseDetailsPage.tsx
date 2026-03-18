@@ -189,8 +189,8 @@ const CourseDetailsPage: React.FC = () => {
           )
         `)
         .eq('id', courseId)
-        .order('part_number', { foreignTable: 'course_parts', ascending: true })
-        .order('order_index', { foreignTable: 'course_parts.lessons', ascending: true })
+        .order('part_number', { ascending: true })
+        .order('order_index', { ascending: true })
         .single();
 
       if (courseError) {

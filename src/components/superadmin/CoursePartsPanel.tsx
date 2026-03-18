@@ -62,7 +62,7 @@ const CoursePartsPanel: React.FC<CoursePartsPanelProps> = ({ courseId }) => {
         `)
         .eq('course_id', courseId)
         .order('part_number', { ascending: true })
-        .order('order_index', { foreignTable: 'lessons', ascending: true });
+        .order('order_index', { ascending: true });
 
       if (error) throw error;
       setCourseParts(data || []);

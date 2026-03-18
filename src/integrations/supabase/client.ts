@@ -71,7 +71,7 @@ function filterValue(v: unknown): string {
   if (typeof v === "number") return `${v}`;
   if (typeof v === "boolean") return v ? "true" : "false";
   // Escape double quotes
-  return `"${String(v).replaceAll('"', '\\"')}"`;
+  return `"${String(v).replace(/\"/g, '\\"')}"`;
 }
 
 function buildFilter(clauses: string[]): string {
@@ -230,7 +230,7 @@ class QueryBuilder<T = any> implements PromiseLike<SupabaseLikeResponse<T>> {
   ilike(field: string, pattern: string) {
     // Supabase pattern is usually "%text%". We'll translate to a case-insensitive regex.
     const raw = String(pattern);
-    const inner = raw.replaceAll("%", "");
+    const inner = raw.replace(/%/g, "");
     const escaped = inner.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     this.filters.push(`${field}~"(?i).*${escaped}.*"`);
     return this;
@@ -297,8 +297,8 @@ class QueryBuilder<T = any> implements PromiseLike<SupabaseLikeResponse<T>> {
     return this;
   }
 
-  order(field: string, opts?: { ascending?: boolean }) {
-    const ascending = opts?.ascending ?? true;
+  order(field: string, opts?: { ascending?: boolean } | any) {
+    const ascending = (opts?.ascending ?? true) as boolean;
     this.sort = `${ascending ? "" : "-"}${field}`;
     return this;
   }
@@ -318,143 +318,23 @@ class QueryBuilder<T = any> implements PromiseLike<SupabaseLikeResponse<T>> {
     return this;
   }
 
-  insert(values: any[] | any) {
+  insert(payload: any) {
     this.op = "insert";
-    this.payload = values;
+    this.payload = payload;
     return this;
   }
 
-  update(values: any) {
+  update(payload: any) {
     this.op = "update";
-    this.payload = values;
+    this.payload = payload;
     return this;
   }
 
-  upsert(values: any, opts?: { onConflict?: string }) {
+  upsert(payload: any, opts?: { onConflict?: string }) {
     this.op = "upsert";
-    this.payload = values;
+    this.payload = payload;
     this.upsertOnConflict = opts?.onConflict;
     return this;
-  }
-
-  private async execSelect(): Promise<SupabaseLikeResponse<any>> {
-    const filter = buildFilter(this.filters);
-    const wantCount = this.selectOpts?.count === "exact";
-    const headOnly = !!this.selectOpts?.head;
-    const collection = resolveCollection(this.table);
-
-    try {
-      if (wantCount && headOnly) {
-        const list = await pb.collection(collection).getList(1, 1, { filter });
-        return { data: null, error: null, count: list.totalItems };
-      }
-
-      if (this.limitToSingle) {
-        const list = await pb.collection(collection).getList(1, 1, { filter, sort: this.sort });
-        const item = list.items[0];
-        if (!item) {
-          if (this.limitToSingle === "maybeSingle") return { data: null, error: null };
-          return { data: null, error: { code: "PGRST116", message: "No rows found" } };
-        }
-        const normalized = this.table === "profiles" ? normalizeProfile(item) : item;
-        const expanded = (await expandForKnownSelect(this.table, this.selectStr, [normalized]))?.[0] ?? normalized;
-        return { data: expanded, error: null };
-      }
-
-      // Default list
-      const items =
-        typeof this.limitCount === "number"
-          ? (await pb.collection(collection).getList(1, this.limitCount, { filter, sort: this.sort })).items
-          : await pb.collection(collection).getFullList({ filter, sort: this.sort });
-      const normalized = this.table === "profiles" ? items.map(normalizeProfile) : items;
-      const expanded = await expandForKnownSelect(this.table, this.selectStr, normalized);
-      return { data: expanded ?? normalized, error: null };
-    } catch (e) {
-      return { data: null, error: toError(e) };
-    }
-  }
-
-  private async execInsert(): Promise<SupabaseLikeResponse<any>> {
-    try {
-      const collection = resolveCollection(this.table);
-      const values = Array.isArray(this.payload) ? this.payload : [this.payload];
-      const created: any[] = [];
-      for (const v of values) {
-        if (this.table === "profiles" && v?.id) {
-          // Treat as "ensure profile exists": update the user record with profile fields.
-          const { id, ...rest } = v;
-          const rec = await pb.collection(collection).update(id, rest);
-          created.push(normalizeProfile(rec));
-        } else {
-          const rec = await pb.collection(collection).create(v);
-          created.push(this.table === "profiles" ? normalizeProfile(rec) : rec);
-        }
-      }
-      const data = Array.isArray(this.payload) ? created : created[0] ?? null;
-      return { data, error: null };
-    } catch (e) {
-      return { data: null, error: toError(e) };
-    }
-  }
-
-  private async execUpdate(): Promise<SupabaseLikeResponse<any>> {
-    const filter = buildFilter(this.filters);
-    try {
-      const collection = resolveCollection(this.table);
-      const list = await pb.collection(collection).getFullList({ filter });
-      if (list.length === 0) return { data: null, error: null };
-      const updated: any[] = [];
-      for (const rec of list) {
-        const u = await pb.collection(collection).update((rec as any).id, this.payload);
-        updated.push(this.table === "profiles" ? normalizeProfile(u) : u);
-      }
-      return { data: updated as any, error: null };
-    } catch (e) {
-      return { data: null, error: toError(e) };
-    }
-  }
-
-  private async execUpsert(): Promise<SupabaseLikeResponse<any>> {
-    const values = this.payload;
-    const onConflict = (this.upsertOnConflict || "")
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-
-    try {
-      const collection = resolveCollection(this.table);
-      if (onConflict.length === 0) {
-        // Fallback: just create
-        const rec = await pb.collection(collection).create(values);
-        return { data: this.table === "profiles" ? normalizeProfile(rec) : rec, error: null };
-      }
-
-      const conflictFilter = onConflict.map((f) => `${f}=${filterValue(values[f])}`).join(" && ");
-      const existing = await pb.collection(collection).getList(1, 1, { filter: conflictFilter });
-      const first = existing.items[0];
-      if (first) {
-        const rec = await pb.collection(collection).update((first as any).id, values);
-        return { data: this.table === "profiles" ? normalizeProfile(rec) : rec, error: null };
-      }
-      const created = await pb.collection(collection).create(values);
-      return { data: this.table === "profiles" ? normalizeProfile(created) : created, error: null };
-    } catch (e) {
-      return { data: null, error: toError(e) };
-    }
-  }
-
-  private async execDelete(): Promise<SupabaseLikeResponse<any>> {
-    const filter = buildFilter(this.filters);
-    try {
-      const collection = resolveCollection(this.table);
-      const list = await pb.collection(collection).getFullList({ filter });
-      for (const rec of list) {
-        await pb.collection(collection).delete((rec as any).id);
-      }
-      return { data: null, error: null };
-    } catch (e) {
-      return { data: null, error: toError(e) };
-    }
   }
 
   delete() {
@@ -462,55 +342,127 @@ class QueryBuilder<T = any> implements PromiseLike<SupabaseLikeResponse<T>> {
     return this;
   }
 
-  private async execute(): Promise<SupabaseLikeResponse<any>> {
-    if (this.op === "select") return this.execSelect();
-    if (this.op === "insert") return this.execInsert();
-    if (this.op === "update") return this.execUpdate();
-    if (this.op === "upsert") return this.execUpsert();
-    if (this.op === "delete") return this.execDelete();
-    return { data: null, error: { message: "Not implemented" } };
-  }
-
   then<TResult1 = SupabaseLikeResponse<T>, TResult2 = never>(
     onfulfilled?: ((value: SupabaseLikeResponse<T>) => TResult1 | PromiseLike<TResult1>) | null,
     onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null
   ): PromiseLike<TResult1 | TResult2> {
-    return this.execute().then(onfulfilled as any, onrejected as any);
-  }
-}
-
-export const supabase = {
-  auth: {
-    async signInWithPassword({ email, password }: { email: string; password: string }) {
+    const run = async (): Promise<SupabaseLikeResponse<T>> => {
       try {
-        await pb.collection("users").authWithPassword(email, password);
-        return { data: { session: { access_token: pb.authStore.token, user: pb.authStore.model } }, error: null };
+        const collection = resolveCollection(this.table);
+
+        if (this.op === "select") {
+          const filter = buildFilter(this.filters);
+          const opts: any = {
+            filter: filter || undefined,
+            sort: this.sort,
+          };
+
+          if (this.limitCount !== null) opts.perPage = this.limitCount;
+
+          let records: any[] = [];
+          if (this.limitToSingle) {
+            const list = await pb.collection(collection).getList(1, 1, opts);
+            records = list.items;
+          } else if (this.limitCount !== null) {
+            const list = await pb.collection(collection).getList(1, this.limitCount, opts);
+            records = list.items;
+          } else {
+            records = await pb.collection(collection).getFullList(opts);
+          }
+
+          if (collection === "users") {
+            records = records.map(normalizeProfile);
+          }
+
+          records = await expandForKnownSelect(this.table, this.selectStr, records);
+
+          const data: any =
+            this.limitToSingle === "single"
+              ? records[0] ?? null
+              : this.limitToSingle === "maybeSingle"
+                ? records[0] ?? null
+                : records;
+
+          return { data, error: null, count: (this.selectOpts as any)?.count ? records.length : null };
+        }
+
+        if (this.op === "insert") {
+          const payloadArr = Array.isArray(this.payload) ? this.payload : [this.payload];
+          const created: any[] = [];
+          for (const p of payloadArr) {
+            const rec = await pb.collection(collection).create(p);
+            created.push(rec);
+          }
+          const data: any = this.limitToSingle ? created[0] : created;
+          return { data, error: null };
+        }
+
+        if (this.op === "update") {
+          // Needs an id filter in practice; we support `.eq('id', ...)` patterns.
+          const idClause = this.filters.find((f) => f.startsWith("id="));
+          const id = idClause ? idClause.slice(3).replace(/^"|"$/g, "") : null;
+          if (!id) return { data: null, error: { message: "Missing id filter for update" } };
+          const updated = await pb.collection(collection).update(id, this.payload);
+          return { data: this.limitToSingle ? updated : ([updated] as any), error: null };
+        }
+
+        if (this.op === "upsert") {
+          // Very small approximation: if onConflict is 'id' and id exists -> update else create
+          const payloadArr = Array.isArray(this.payload) ? this.payload : [this.payload];
+          const results: any[] = [];
+          for (const p of payloadArr) {
+            if (this.upsertOnConflict === "id" && p?.id) {
+              const updated = await pb.collection(collection).update(p.id, p);
+              results.push(updated);
+            } else {
+              const created = await pb.collection(collection).create(p);
+              results.push(created);
+            }
+          }
+          const data: any = this.limitToSingle ? results[0] : results;
+          return { data, error: null };
+        }
+
+        if (this.op === "delete") {
+          const idClause = this.filters.find((f) => f.startsWith("id="));
+          const id = idClause ? idClause.slice(3).replace(/^"|"$/g, "") : null;
+          if (!id) return { data: null, error: { message: "Missing id filter for delete" } };
+          await pb.collection(collection).delete(id);
+          return { data: null as any, error: null };
+        }
+
+        return { data: null, error: { message: "Unsupported operation" } };
       } catch (e) {
         return { data: null, error: toError(e) };
       }
+    };
+
+    return run().then(onfulfilled as any, onrejected as any);
+  }
+}
+
+const supabase = {
+  auth: {
+    async signInWithPassword({ email, password }: { email: string; password: string }) {
+      try {
+        const authData = await pb.collection("users").authWithPassword(email, password);
+        const user = authData?.record ?? null;
+        const access_token = authData?.token ?? "";
+        return {
+          data: { session: { access_token, user } },
+          error: null,
+        };
+      } catch (e) {
+        return { data: null, error: toError(e, "Login failed") };
+      }
     },
 
-    async signUp({
-      email,
-      password,
-      options,
-    }: {
-      email: string;
-      password: string;
-      options?: { data?: Record<string, any> };
-    }) {
+    async signUp({ email, password }: { email: string; password: string }) {
       try {
-        // PocketBase expects passwordConfirm
-        const maybeUsername = options?.data?.username;
-        await pb.collection("users").create({
-          email,
-          password,
-          passwordConfirm: password,
-          ...(typeof maybeUsername === "string" && maybeUsername.length > 0 ? { username: maybeUsername } : {}),
-        });
-        return { data: { user: null, session: null }, error: null };
+        const created = await pb.collection("users").create({ email, password, passwordConfirm: password });
+        return { data: created, error: null };
       } catch (e) {
-        return { data: null, error: toError(e) };
+        return { data: null, error: toError(e, "Sign up failed") };
       }
     },
 
@@ -519,30 +471,20 @@ export const supabase = {
       return { error: null };
     },
 
-    async getSession() {
-      const model = pb.authStore.model as any;
-      const session: SupabaseLikeSession | null = pb.authStore.isValid
-        ? { access_token: pb.authStore.token, user: model ? { id: model.id, email: model.email } : null }
-        : null;
-      return { data: { session }, error: null };
-    },
-
-    onAuthStateChange(callback: (event: string, session: SupabaseLikeSession | null) => void) {
-      const unsub = pb.authStore.onChange(() => {
-        const model = pb.authStore.model as any;
-        const session: SupabaseLikeSession | null = pb.authStore.isValid
-          ? { access_token: pb.authStore.token, user: model ? { id: model.id, email: model.email } : null }
-          : null;
-        callback(session ? "SIGNED_IN" : "SIGNED_OUT", session);
-      }, true);
-      return { data: { subscription: { unsubscribe: () => unsub() } } };
+    async getSession(): Promise<{ data: { session: SupabaseLikeSession | null }; error: SupabaseLikeError | null }> {
+      try {
+        const token = pb.authStore.token;
+        const record = pb.authStore.record as any;
+        if (!token || !record) return { data: { session: null }, error: null };
+        return { data: { session: { access_token: token, user: { id: record.id, email: record.email } } }, error: null };
+      } catch (e) {
+        return { data: { session: null }, error: toError(e) };
+      }
     },
 
     async getUser() {
-      const model = pb.authStore.model as any;
-      if (!pb.authStore.isValid || !model) return { data: { user: null }, error: null };
-      const user: SupabaseLikeUser = { id: model.id, email: model.email };
-      return { data: { user }, error: null };
+      const rec = pb.authStore.record as any;
+      return { data: { user: rec ? { id: rec.id, email: rec.email } : null }, error: null };
     },
   },
 
@@ -550,30 +492,42 @@ export const supabase = {
     return new QueryBuilder(table);
   },
 
-  // Minimal realtime stubs (PocketBase migration).
-  // The UI previously relied on Supabase Realtime. For now we no-op these so chat doesn't break,
-  // and components can use polling.
-  channel(_name: string, _opts?: any) {
-    const handlers: Array<{ type: string; filter: any; cb: (payload: any) => void }> = [];
-    const api = {
-      on(type: string, filter: any, cb: (payload: any) => void) {
-        handlers.push({ type, filter, cb });
-        return api;
+  channel(_name: string) {
+    // Minimal stub for realtime usage in the UI.
+    return {
+      on() {
+        return this;
       },
       subscribe() {
-        return api;
+        return { data: null, error: null };
       },
-      send(_msg: any) {
-        // No-op: typing indicator won't broadcast cross-clients in this adapter.
-        // We still return a resolved promise-like to match some callsites.
-        return Promise.resolve({ data: null, error: null });
+      unsubscribe() {
+        return { data: null, error: null };
       },
-      _handlers: handlers,
     };
-    return api as any;
   },
 
-  removeChannel(_channel: any) {
-    // no-op
+  storage: {
+    from(_bucket: string) {
+      return {
+        async upload(_path: string, _file: any, _opts?: any) {
+          return { data: null, error: { message: "Storage is not supported with PocketBase adapter" } };
+        },
+        async remove(_paths: string[]) {
+          return { data: null, error: { message: "Storage is not supported with PocketBase adapter" } };
+        },
+        getPublicUrl(path: string) {
+          return { data: { publicUrl: path } };
+        },
+      };
+    },
+  },
+
+  functions: {
+    async invoke(_name: string, _opts?: any) {
+      return { data: null, error: { message: "Edge functions are not supported with PocketBase adapter" } };
+    },
   },
 };
+
+export { supabase };
