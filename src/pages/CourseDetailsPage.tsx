@@ -366,45 +366,21 @@ const CourseDetailsPage: React.FC = () => {
   }, [checkLessonCompletion, fetchExercisesAndSubmissions]);
 
   useEffect(() => {
-    const getSignedUrl = async () => {
-      if (!selectedLessonId || !user || !courseId || !session?.access_token) {
-        setSignedVideoUrl(null);
-        return;
-      }
-
-      try {
-        const response = await fetch(`https://bpeyprktacfufxonzjac.supabase.co/functions/v1/get-signed-video-url`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session.access_token}`,
-          },
-          body: JSON.stringify({
-            lessonId: selectedLessonId,
-            courseId: courseId,
-          }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to get signed video URL');
-        }
-
-        const data = await response.json();
-        setSignedVideoUrl(data.signedUrl);
-      } catch (error: any) {
-        console.error("Error fetching signed video URL:", error);
-        showError(`Video yuklashda xato: ${error.message}`);
-        setSignedVideoUrl(null);
-      }
-    };
-
-    if (isPurchased) {
-      getSignedUrl();
-    } else {
+    // Supabase Storage signed URLs were previously used.
+    // In PocketBase migration, we rely on `lessons.video_url` being directly accessible
+    // (or served by PocketBase with proper access rules).
+    if (!isPurchased || !selectedLessonId) {
       setSignedVideoUrl(null);
+      return;
     }
-  }, [selectedLessonId, user, courseId, session?.access_token, isPurchased]);
+
+    const lesson =
+      courseParts
+        .flatMap((p) => p.lessons)
+        .find((l) => l.id === selectedLessonId) || null;
+
+    setSignedVideoUrl(lesson?.video_url || null);
+  }, [selectedLessonId, isPurchased, courseParts]);
 
   useEffect(() => {
     setPrevNextLessons(findLessonNavigation(courseParts, selectedLessonId));
@@ -844,7 +820,7 @@ const CourseDetailsPage: React.FC = () => {
                                         isSubmitted && option === exercise.correct_answer
                                           ? 'border-green-500 text-green-500'
                                           : isSubmitted && option === userSubmission?.submitted_answer && !isCorrect
-                                            ? 'border-red-500 text-red-500'
+                                            ? 'border-primary text-primary'
                                             : ''
                                       }
                                     />
@@ -854,7 +830,7 @@ const CourseDetailsPage: React.FC = () => {
                                         isSubmitted && option === exercise.correct_answer
                                           ? 'text-green-600 font-medium'
                                           : isSubmitted && option === userSubmission?.submitted_answer && !isCorrect
-                                            ? 'text-red-600 font-medium'
+                                            ? 'text-primary font-medium'
                                             : 'text-gray-800'
                                       }
                                     >
@@ -863,7 +839,7 @@ const CourseDetailsPage: React.FC = () => {
                                         <Check className="inline-block h-4 w-4 ml-2 text-green-500" />
                                       )}
                                       {isSubmitted && option === userSubmission?.submitted_answer && !isCorrect && (
-                                        <Circle className="inline-block h-4 w-4 ml-2 text-red-500" />
+                                        <Circle className="inline-block h-4 w-4 ml-2 text-primary" />
                                       )}
                                     </Label>
                                   </div>
@@ -872,7 +848,7 @@ const CourseDetailsPage: React.FC = () => {
                             )}
                             <div className="mt-4">
                               {isSubmitted ? (
-                                <p className={`font-semibold ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
+                                <p className={`font-semibold ${isCorrect ? 'text-green-600' : 'text-primary'}`}>
                                   {isCorrect ? "Sizning javobingiz to'g'ri!" : `Sizning javobingiz noto'g'ri. To'g'ri javob: "${exercise.correct_answer}"`}
                                 </p>
                               ) : (

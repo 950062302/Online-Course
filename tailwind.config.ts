@@ -27,8 +27,8 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          dark: "#E55A50", // Updated darker shade
-          light: "rgba(255, 105, 95, 0.1)", // Updated lighter shade
+          dark: "#00caca",
+          light: "rgba(26, 255, 255, 0.12)",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -64,7 +64,7 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        "ferrari-red": "#FF695F", // Updated to match new primary color
+        "ferrari-red": "#1affff",
       },
       borderRadius: {
         lg: "var(--radius)",

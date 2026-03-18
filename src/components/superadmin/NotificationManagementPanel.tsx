@@ -263,7 +263,7 @@ const NotificationManagementPanel: React.FC = () => {
                 </Select>
               </div>
             )}
-            <Button onClick={handleSendMessage} disabled={isSending} className="bg-ferrari-red hover:bg-red-700 text-white">
+            <Button onClick={handleSendMessage} disabled={isSending} className="bg-ferrari-red hover:brightness-95 text-primary-foreground">
               {isSending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Yuborilmoqda...
@@ -294,7 +294,7 @@ const NotificationManagementPanel: React.FC = () => {
               </TableHeader>
               <TableBody>
                 {notifications.map((notification) => (
-                  <TableRow key={notification.id} className="hover:bg-red-950 transition duration-150">
+                  <TableRow key={notification.id} className="hover:bg-[rgba(26,255,255,0.10)] transition duration-150">
                     <TableCell className="font-medium text-foreground max-w-xs truncate">{notification.message}</TableCell>
                     <TableCell className="text-muted-foreground">
                       {notification.user_id ? (
@@ -334,7 +334,7 @@ const NotificationManagementPanel: React.FC = () => {
             <AlertDialogAction
               onClick={confirmDeleteNotification}
               disabled={isDeleting}
-              className="bg-destructive hover:bg-red-700 text-white"
+              className="bg-destructive hover:brightness-95 text-destructive-foreground"
             >
               {isDeleting ? "O'chirilmoqda..." : "O'chirish"}
             </AlertDialogAction>

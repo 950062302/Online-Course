@@ -157,7 +157,7 @@ const PurchaseCourseDialog: React.FC<PurchaseCourseDialogProps> = ({
           <AlertDialogAction
             onClick={handlePurchase}
             disabled={isPurchasing}
-            className="bg-ferrari-red hover:bg-red-700 text-white"
+            className="bg-ferrari-red hover:brightness-95 text-primary-foreground"
           >
             {isPurchasing ? "Sotib olinmoqda..." : "Tasdiqlash"}
           </AlertDialogAction>

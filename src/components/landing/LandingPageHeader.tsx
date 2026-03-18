@@ -36,7 +36,7 @@ const LandingPageHeader: React.FC = () => {
           {/* Logotip */}
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <Link to="/" className="text-3xl font-extrabold tracking-tight">
-              <span className="text-primary">CEFR LC</span>
+              <span className="text-primary">EduDars.uz</span>
             </Link>
           </div>
 
@@ -80,7 +80,7 @@ const LandingPageHeader: React.FC = () => {
                     className="text-2xl font-extrabold tracking-tight text-primary"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    CEFR LC
+                    EduDars.uz
                   </Link>
                 </div>
 
@@ -104,7 +104,7 @@ const LandingPageHeader: React.FC = () => {
                 <div className="mt-4 pt-3 border-t border-gray-200 space-y-2">
                   <Link
                     to="/login"
-                    className="w-full flex items-center justify-center px-3 py-1.5 border border-primary rounded-lg text-sm font-medium text-primary bg-white hover:bg-red-50 transition duration-150"
+                    className="w-full flex items-center justify-center px-3 py-1.5 border border-primary rounded-lg text-sm font-medium text-primary bg-white hover:bg-[rgba(26,255,255,0.12)] transition duration-150"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <LogIn className="h-4 w-4 mr-2" /> Kirish

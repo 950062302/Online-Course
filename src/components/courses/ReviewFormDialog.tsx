@@ -207,7 +207,7 @@ const ReviewFormDialog: React.FC<ReviewFormDialogProps> = ({
               </p>
             )}
             {existingReview && existingReview.status === 'rejected' && (
-              <p className="text-sm text-red-500 text-center">
+              <p className="text-sm text-primary text-center">
                 Sizning avvalgi izohingiz rad etilgan. Iltimos, o'zgartirish kiritib, qayta yuboring.
               </p>
             )}
@@ -221,7 +221,7 @@ const ReviewFormDialog: React.FC<ReviewFormDialogProps> = ({
             type="submit"
             onClick={handleSubmitReview}
             disabled={isSubmitting || isLoadingReview}
-            className="bg-ferrari-red hover:bg-red-700 text-white"
+            className="bg-ferrari-red hover:brightness-95 text-primary-foreground"
           >
             {isSubmitting ? (
               <>

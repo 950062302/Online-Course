@@ -64,13 +64,13 @@ const DashboardOverview: React.FC = () => {
         {/* MOBILE HOME (only for < md) */}
         <div className="md:hidden space-y-4">
           {/* Top hero - red & white gradient */}
-          <div className="rounded-2xl bg-gradient-to-br from-ferrari-red to-red-500 text-white p-4 shadow-md">
-            <p className="text-[11px] font-semibold opacity-90">CEFR LC</p>
+          <div className="rounded-2xl bg-gradient-to-br from-ferrari-red to-ferrari-red text-black p-4 shadow-md border border-[rgba(26,255,255,0.35)]">
+            <p className="text-[11px] font-semibold opacity-90">EduDars.uz</p>
             <h2 className="mt-1 text-xl font-extrabold leading-snug">
               Salom, {displayName}!
             </h2>
             <p className="mt-1 text-[11px] opacity-90">
-              CEFR darajangizni tez va qulay oshirib boring.
+              O‘qishni tez va qulay davom ettiring.
             </p>
             <p className="mt-2 text-xs font-medium">
               Sizning balansingiz:{" "}
@@ -93,7 +93,7 @@ const DashboardOverview: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate("/dashboard/active-courses")}
-              className="flex flex-col items-center justify-center bg-white border border-red-100 rounded-xl py-2 shadow-sm active:scale-[0.98] transition"
+              className="flex flex-col items-center justify-center bg-white border border-[rgba(26,255,255,0.45)] rounded-xl py-2 shadow-sm active:scale-[0.98] transition"
             >
               <BookOpen className="h-5 w-5 text-ferrari-red mb-1" />
               <span className="text-[10px] font-medium text-gray-800 text-center">
@@ -103,7 +103,7 @@ const DashboardOverview: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate("/courses")}
-              className="flex flex-col items-center justify-center bg-white border border-red-100 rounded-xl py-2 shadow-sm active:scale-[0.98] transition"
+              className="flex flex-col items-center justify-center bg-white border border-[rgba(26,255,255,0.45)] rounded-xl py-2 shadow-sm active:scale-[0.98] transition"
             >
               <BookOpen className="h-5 w-5 text-ferrari-red mb-1" />
               <span className="text-[10px] font-medium text-gray-800 text-center">
@@ -113,7 +113,7 @@ const DashboardOverview: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate("/dashboard/history")}
-              className="flex flex-col items-center justify-center bg-white border border-red-100 rounded-xl py-2 shadow-sm active:scale-[0.98] transition"
+              className="flex flex-col items-center justify-center bg-white border border-[rgba(26,255,255,0.45)] rounded-xl py-2 shadow-sm active:scale-[0.98] transition"
             >
               <History className="h-5 w-5 text-ferrari-red mb-1" />
               <span className="text-[10px] font-medium text-gray-800 text-center">
@@ -123,7 +123,7 @@ const DashboardOverview: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate("/dashboard/chat")}
-              className="flex flex-col items-center justify-center bg-white border border-red-100 rounded-xl py-2 shadow-sm active:scale-[0.98] transition"
+              className="flex flex-col items-center justify-center bg-white border border-[rgba(26,255,255,0.45)] rounded-xl py-2 shadow-sm active:scale-[0.98] transition"
             >
               <MessageCircle className="h-5 w-5 text-ferrari-red mb-1" />
               <span className="text-[10px] font-medium text-gray-800 text-center">

@@ -87,7 +87,7 @@ const ApplicationForm: React.FC = () => {
             />
           </div>
           {form.formState.errors.name && (
-            <p className="text-sm text-red-500 mt-1">{form.formState.errors.name.message}</p>
+            <p className="text-sm text-primary mt-1">{form.formState.errors.name.message}</p>
           )}
         </div>
         <div>
@@ -103,7 +103,7 @@ const ApplicationForm: React.FC = () => {
             />
           </div>
           {form.formState.errors.phone && (
-            <p className="text-sm text-red-500 mt-1">{form.formState.errors.phone.message}</p>
+            <p className="text-sm text-primary mt-1">{form.formState.errors.phone.message}</p>
           )}
         </div>
         <div>
@@ -119,7 +119,7 @@ const ApplicationForm: React.FC = () => {
             />
           </div>
           {form.formState.errors.message && (
-            <p className="text-sm text-red-500 mt-1">{form.formState.errors.message.message}</p>
+            <p className="text-sm text-primary mt-1">{form.formState.errors.message.message}</p>
           )}
         </div>
         <Button

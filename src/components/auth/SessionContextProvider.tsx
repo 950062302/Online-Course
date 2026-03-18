@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, createContext, useContext, useCallback, useRef } from 'react';
-import { Session, User } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, SupabaseLikeSession, SupabaseLikeUser } from '@/integrations/supabase/client';
 import { showError } from '@/utils/toast';
 
 export interface Profile {
@@ -24,8 +23,8 @@ export interface Profile {
 }
 
 interface SessionContextType {
-  session: Session | null;
-  user: User | null;
+  session: SupabaseLikeSession | null;
+  user: SupabaseLikeUser | null;
   profile: Profile | null;
   isLoading: boolean;
   refreshProfile: () => Promise<void>;
@@ -37,13 +36,15 @@ const SessionContext = createContext<SessionContextType | undefined>(undefined);
 const LAST_SEEN_UPDATE_INTERVAL = 30 * 1000; // 30 soniya
 
 export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<SupabaseLikeSession | null>(null);
+  const [user, setUser] = useState<SupabaseLikeUser | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const lastSeenIntervalRef = useRef<number | null>(null);
 
-  const fetchUserProfile = useCallback(async (currentUser: User) => {
+  const BYPASS_AUTH = import.meta.env.VITE_BYPASS_AUTH === 'true';
+
+  const fetchUserProfile = useCallback(async (currentUser: SupabaseLikeUser) => {
     let fetchedProfile: Profile | null = null;
     const { data, error: fetchError } = await supabase
       .from('profiles')
@@ -141,7 +142,38 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
   }, [user, profile]);
 
   useEffect(() => {
-    const handleAuthStateChange = async (event: string, currentSession: Session | null) => {
+    if (BYPASS_AUTH) {
+      // Dev-only bypass to quickly test user/admin panels without logging in.
+      // Role auto-switches based on current path.
+      const isAdminPath = typeof window !== 'undefined' && window.location.pathname.startsWith('/superadmin');
+      const devUser: SupabaseLikeUser = { id: 'dev-user', email: 'dev@edudars.uz' };
+      const devSession: SupabaseLikeSession = { access_token: 'dev-token', user: devUser };
+      const devProfile: Profile = {
+        id: devUser.id,
+        created_at: new Date().toISOString(),
+        username: 'EduDars Dev',
+        role: isAdminPath ? 'developer' : 'user',
+        balance: 1_000_000,
+        score: 0,
+        phone: '',
+        bio: '',
+        total_time_spent_seconds: 0,
+        streak: 0,
+        xp: 0,
+        level: 0,
+        last_checkin_date: null,
+        last_test_date: null,
+        last_seen_at: new Date().toISOString(),
+      };
+
+      setSession(devSession);
+      setUser(devUser);
+      setProfile(devProfile);
+      setIsLoading(false);
+      return;
+    }
+
+    const handleAuthStateChange = async (event: string, currentSession: SupabaseLikeSession | null) => {
       setSession(currentSession);
       const currentUser = currentSession?.user || null;
       setUser(currentUser);
@@ -176,7 +208,7 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, [fetchUserProfile]);
+  }, [fetchUserProfile, BYPASS_AUTH]);
 
   return (
     <SessionContext.Provider value={{ session, user, profile, isLoading, refreshProfile, logout }}>

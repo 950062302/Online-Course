@@ -8,9 +8,9 @@ const AdvantagesSection: React.FC = () => {
     <section id="afzalliklar" className="py-16 sm:py-24 content-layer">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <ScrollFloat tag="h2" containerClassName="text-base text-primary font-semibold tracking-wide uppercase">CEFR LC Farqi</ScrollFloat>
+          <ScrollFloat tag="h2" containerClassName="text-base text-primary font-semibold tracking-wide uppercase">EduDars.uz farqi</ScrollFloat>
           <ScrollFloat tag="p" containerClassName="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-            CEFR LC — To‘g‘ri tanlov!
+            EduDars.uz — To‘g‘ri tanlov!
           </ScrollFloat>
         </div>
 

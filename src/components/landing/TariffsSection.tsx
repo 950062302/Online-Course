@@ -89,7 +89,7 @@ const TariffsSection: React.FC = () => {
     return (
       <section id="tariflar" className="py-16 sm:py-24 relative overflow-hidden tariffs-section-bg min-h-screen bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <ScrollFloat tag="h2" containerClassName="text-base text-primary-purple font-semibold tracking-wide uppercase">
+          <ScrollFloat tag="h2" containerClassName="text-base text-primary font-semibold tracking-wide uppercase">
             Tariflar va Narxlar
           </ScrollFloat>
           <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">

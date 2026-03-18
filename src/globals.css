@@ -45,8 +45,9 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
 
-    --primary: 0 100% 50%; /* #FF0000 YouTube qizil */
-    --primary-foreground: 0 0% 100%;
+    /* Brand accent: #1affff */
+    --primary: 180 100% 55%;
+    --primary-foreground: 0 0% 0%;
 
     --secondary: 0 0% 95%;
     --secondary-foreground: 0 0% 0%;
@@ -69,7 +70,7 @@
     --sidebar-background: 0 0% 100%; /* Oq sidebar fon */
     --sidebar-foreground: 0 0% 0%;
 
-    --sidebar-primary: 0 100% 50%; /* YouTube qizil */
+    --sidebar-primary: 180 100% 55%;
 
     --sidebar-primary-foreground: 0 0% 100%;
 
@@ -79,17 +80,17 @@
 
     --sidebar-border: 0 0% 90%;
 
-    --sidebar-ring: 0 100% 50%;
+    --sidebar-ring: 180 100% 55%;
 
-    --primary-hex: #FF0000; /* YouTube qizil */
-    --primary-dark: #CC0000; /* Qorong'i qizil */
-    --primary-light: rgba(255, 0, 0, 0.1); /* Yengil qizil */
+    --primary-hex: #1affff;
+    --primary-dark: #00caca;
+    --primary-light: rgba(26, 255, 255, 0.12);
 
     /* GooeyNav colors */
     --color-1: var(--primary-hex);
-    --color-2: #CC0000;
-    --color-3: #FF0000;
-    --color-4: #FF6B6B;
+    --color-2: #00caca;
+    --color-3: #1affff;
+    --color-4: rgba(26, 255, 255, 0.55);
   }
 
   .dark {
@@ -102,8 +103,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
 
-    --primary: 0 100% 50%; /* YouTube qizil */
-    --primary-foreground: 0 0% 100%;
+    --primary: 180 100% 55%;
+    --primary-foreground: 0 0% 0%;
 
     --secondary: 0 0% 20%;
     --secondary-foreground: 0 0% 95%;
@@ -122,12 +123,12 @@
     --ring: 0 0% 95%;
     --sidebar-background: 0 0% 10%;
     --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 0 100% 50%;
+    --sidebar-primary: 180 100% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 20%;
     --sidebar-accent-foreground: 0 0% 95%;
     --sidebar-border: 0 0% 20%;
-    --sidebar-ring: 0 100% 50%;
+    --sidebar-ring: 180 100% 55%;
   }
 }
 
@@ -156,22 +157,22 @@
   backdrop-filter: blur(8px) saturate(1.05);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 14px;
-  border: 1px solid rgba(255, 0, 0, 0.1);
-  box-shadow: 0 10px 30px rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(26, 255, 255, 0.25);
+  box-shadow: 0 10px 30px rgba(26, 255, 255, 0.18);
   transition: transform .26s cubic-bezier(.2,.9,.2,1), box-shadow .26s;
 }
-.glass-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(255, 0, 0, 0.15); }
+.glass-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(26, 255, 255, 0.25); }
 
 .oval { border-radius: 80px; }
 
 .pill {
   background: linear-gradient(90deg,var(--primary-hex),var(--primary-dark));
-  color:white;
+  color: #001014;
   padding:6px 14px;
   border-radius:999px;
   font-weight:600;
   font-size:13px;
-  box-shadow: 0 8px 22px rgba(255, 0, 0, 0.2);
+  box-shadow: 0 8px 22px rgba(26, 255, 255, 0.22);
 }
 
 /* Fallback message when WebGL unsupported */
@@ -190,9 +191,9 @@
   background: linear-gradient(
     90deg,
     var(--primary-hex),
-    #CC0000,
-    #FF6B6B,
-    #FF0000,
+    #00caca,
+    rgba(26, 255, 255, 0.55),
+    #1affff,
     var(--primary-hex)
   );
   background-size: 400% 100%;
@@ -216,17 +217,17 @@
 /* Custom dark gradient card for DateTimeCard */
 .dark-gradient-card {
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(255, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(26, 255, 255, 0.18);
   color: #000;
   background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
   backdrop-filter: blur(8px) saturate(1.05);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(26, 255, 255, 0.25);
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   overflow: hidden;
 }
 
 .dark-gradient-card:hover {
-  box-shadow: 0 20px 60px rgba(255, 0, 0, 0.15);
+  box-shadow: 0 20px 60px rgba(26, 255, 255, 0.25);
 }

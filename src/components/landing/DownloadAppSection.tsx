@@ -7,9 +7,9 @@ const DownloadAppSection: React.FC = () => {
         <div
             className="card my-[0px] p-[0px] border-[10px] rounded-[26px] border-[#e6e6e6] mx-[226px]">
             <span
-                className="small-text px-[85px] border-[6px] border-[#ad293e] text-[16px] font-[700] [color:#ffffff] font-[Consolas,_monospace]">MOBIL ILOVA</span>
+                className="small-text px-[85px] border-[6px] border-[#1affff] text-[16px] font-[700] [color:#001014] font-[Consolas,_monospace]">MOBIL ILOVA</span>
             <span className="title">Har qanday joyda o'qing</span>
-            <span className="desc border-[0px] rounded-[58px] border-[#e6e6e6]">CEFR o'qish platformamizni yuklab oling va istalgan vaqtda o'rganishni davom ettiring.</span>
+            <span className="desc border-[0px] rounded-[58px] border-[#e6e6e6]">EduDars.uz ilovasini yuklab oling va istalgan vaqtda o‘rganishni davom ettiring.</span>
             <div className="buttons">
                 <a href="#" className="button">
                     <span className="icon">

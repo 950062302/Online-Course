@@ -5,7 +5,7 @@ import { Send, MoreVertical, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, pb } from '@/integrations/supabase/client';
 import MessageBubble from './MessageBubble';
 import { useSession } from '@/components/auth/SessionContextProvider';
 import { showError } from '@/utils/toast';
@@ -44,7 +44,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ selectedUser, onBack }) => {
 
   const [isOtherTyping, setIsOtherTyping] = useState(false);
   const typingTimeoutRef = useRef<number | null>(null);
-  const typingChannelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
+  const typingSendThrottleRef = useRef<number | null>(null);
 
   // Global online/offline listeners
   useEffect(() => {
@@ -105,70 +105,58 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ selectedUser, onBack }) => {
     };
     markAsRead();
 
-    // Realtime messages
-    const msgChannel = supabase
-      .channel('chat_room')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages',
-          filter: `receiver_id=eq.${user.id}`,
-        },
-        (payload) => {
-          const newMsg = payload.new as Message;
-          if (newMsg.sender_id === selectedUser.id) {
-            setMessages((prev) => [...prev, newMsg]);
+    // PocketBase realtime (SSE)
+    let unsubMessages: (() => Promise<void>) | null = null;
+    let unsubTyping: (() => Promise<void>) | null = null;
+    const conversationKey = [user.id, selectedUser.id].sort().join("-");
+
+    const attachRealtime = async () => {
+      try {
+        unsubMessages = await pb.collection('messages').subscribe('*', (e: any) => {
+          if (e?.action !== 'create' && e?.action !== 'update') return;
+          const rec = e.record as Message;
+          if (!rec) return;
+
+          const isThisConversation =
+            (rec.sender_id === user.id && rec.receiver_id === selectedUser.id) ||
+            (rec.sender_id === selectedUser.id && rec.receiver_id === user.id);
+          if (!isThisConversation) return;
+
+          setMessages((prev) => {
+            const existing = prev.find((m) => m.id === rec.id);
+            if (existing) {
+              return prev.map((m) => (m.id === rec.id ? rec : m));
+            }
+            return [...prev, rec].sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+          });
+
+          if (rec.sender_id === selectedUser.id) {
             markAsRead();
           }
-        }
-      )
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages',
-          filter: `sender_id=eq.${user.id}`,
-        },
-        (payload) => {
-          const newMsg = payload.new as Message;
-          if (newMsg.receiver_id === selectedUser.id) {
-            setMessages((prev) => {
-              if (prev.find((m) => m.id === newMsg.id)) return prev;
-              return [...prev, newMsg];
-            });
-          }
-        }
-      )
-      .subscribe();
+        });
 
-    // Typing channel (broadcast, no DB write)
-    const conversationKey = [user.id, selectedUser.id].sort().join("-");
-    const typingChannel = supabase.channel(`typing:${conversationKey}`, {
-      config: {
-        broadcast: { ack: false, self: false },
-      },
-    });
+        unsubTyping = await pb.collection('typing_events').subscribe('*', (e: any) => {
+          if (e?.action !== 'create') return;
+          const rec = e.record as any;
+          if (!rec) return;
+          if (rec.conversation_key !== conversationKey) return;
+          if (rec.to_user !== user.id) return;
+          if (rec.from_user !== selectedUser.id) return;
 
-    typingChannel
-      .on('broadcast', { event: 'typing' }, () => {
-        setIsOtherTyping(true);
-        if (typingTimeoutRef.current) {
-          window.clearTimeout(typingTimeoutRef.current);
-        }
-        typingTimeoutRef.current = window.setTimeout(() => {
-          setIsOtherTyping(false);
-        }, 2000);
-      })
-      .subscribe();
+          setIsOtherTyping(true);
+          if (typingTimeoutRef.current) window.clearTimeout(typingTimeoutRef.current);
+          typingTimeoutRef.current = window.setTimeout(() => setIsOtherTyping(false), 2000);
+        });
+      } catch (err) {
+        console.error('[ChatWindow] realtime subscribe error:', err);
+      }
+    };
 
-    typingChannelRef.current = typingChannel;
+    attachRealtime();
 
     return () => {
-      supabase.removeChannel(msgChannel);
-      supabase.removeChannel(typingChannel);
+      if (unsubMessages) unsubMessages();
+      if (unsubTyping) unsubTyping();
       if (typingTimeoutRef.current) {
         window.clearTimeout(typingTimeoutRef.current);
       }
@@ -206,14 +194,25 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ selectedUser, onBack }) => {
     const value = e.target.value;
     setNewMessage(value);
 
-    // Send typing event (no DB write)
-    if (typingChannelRef.current && value.trim() && user && selectedUser) {
-      typingChannelRef.current.send({
-        type: 'broadcast',
-        event: 'typing',
-        payload: { from: user.id },
+    // Typing event via PocketBase (DB write, throttled)
+    if (!value.trim() || !user || !selectedUser) return;
+    if (typingSendThrottleRef.current) return;
+
+    typingSendThrottleRef.current = window.setTimeout(() => {
+      typingSendThrottleRef.current = null;
+    }, 900) as unknown as number;
+
+    const conversationKey = [user.id, selectedUser.id].sort().join("-");
+    supabase
+      .from('typing_events')
+      .insert({
+        conversation_key: conversationKey,
+        from_user: user.id,
+        to_user: selectedUser.id,
+      })
+      .then(() => {
+        // ignore
       });
-    }
   };
 
   if (!selectedUser) {

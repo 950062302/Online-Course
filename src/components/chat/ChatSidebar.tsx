@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, pb } from "@/integrations/supabase/client";
 import { useSession } from "@/components/auth/SessionContextProvider";
 import { cn } from "@/lib/utils";
 
@@ -129,27 +129,27 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
     };
 
     fetchRecentChatsAndUnread();
-
-    const channel = supabase
-      .channel("chat_sidebar")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "messages" },
-        () => {
-          fetchRecentChatsAndUnread();
-        }
-      )
-      .on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "messages" },
-        () => {
-          fetchRecentChatsAndUnread();
-        }
-      )
-      .subscribe();
+    // PocketBase realtime subscribe for messages
+    let unsub: (() => Promise<void>) | null = null;
+    const attach = async () => {
+      try {
+        unsub = await pb.collection("messages").subscribe("*", (e: any) => {
+          if (e?.action !== "create" && e?.action !== "update") return;
+          const rec = e.record as any;
+          if (!rec) return;
+          // If current user is sender or receiver, refresh sidebar lists
+          if (rec.sender_id === user.id || rec.receiver_id === user.id) {
+            fetchRecentChatsAndUnread();
+          }
+        });
+      } catch (err) {
+        console.error("[ChatSidebar] realtime subscribe error:", err);
+      }
+    };
+    attach();
 
     return () => {
-      supabase.removeChannel(channel);
+      if (unsub) unsub();
     };
   }, [user]);
 
@@ -258,7 +258,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
                         {admin.username || "Admin"}
                       </span>
                       {unread > 0 && (
-                        <span className="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full">
+                        <span className="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold bg-primary text-primary-foreground rounded-full">
                           {unread > 9 ? "9+" : unread}
                         </span>
                       )}
@@ -319,7 +319,7 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({
                     {chatUser.username}
                   </span>
                   {unread > 0 && (
-                    <span className="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full">
+                    <span className="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold bg-primary text-primary-foreground rounded-full">
                       {unread > 9 ? "9+" : unread}
                     </span>
                   )}

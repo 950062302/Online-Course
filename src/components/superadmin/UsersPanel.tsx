@@ -157,7 +157,7 @@ const UsersPanel: React.FC = () => {
                 </TableRow>
               ) : (
                 users.map((user) => (
-                  <TableRow key={user.id} className="hover:bg-red-950 transition duration-150">
+                  <TableRow key={user.id} className="hover:bg-[rgba(26,255,255,0.10)] transition duration-150">
                     <TableCell className="font-medium text-foreground cursor-pointer" onClick={() => handleUserRowClick(user.id, user.username || user.email.split('@')[0])}>
                       <p>{user.username}</p>
                       <p className="text-sm text-muted-foreground">{user.email}</p>

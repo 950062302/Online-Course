@@ -231,7 +231,7 @@ const Courses = () => {
         {filteredCourses.length === 0 ? (
           <p className="col-span-full text-center text-gray-500">
             Hozircha kurslar mavjud emas.{" "}
-            <Link to="/courses" className="text-primary-purple hover:underline">
+            <Link to="/courses" className="text-primary hover:underline">
               Kurslarni ko'rish
             </Link>
           </p>

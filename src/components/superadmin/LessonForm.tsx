@@ -325,7 +325,7 @@ const LessonForm: React.FC<LessonFormProps> = ({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                    className="absolute top-2 right-2 text-primary hover:brightness-75"
                     onClick={() => handleRemoveExercise(index)}
                     disabled={isSubmitting}
                   >
@@ -421,7 +421,7 @@ const LessonForm: React.FC<LessonFormProps> = ({
           <Button variant="outline" onClick={onClose} disabled={isSubmitting}>
             Bekor qilish
           </Button>
-          <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-ferrari-red hover:bg-red-700 text-white">
+          <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-ferrari-red hover:brightness-95 text-primary-foreground">
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saqlanmoqda...

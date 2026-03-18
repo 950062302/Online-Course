@@ -122,7 +122,7 @@ const UserBalanceDialog: React.FC<UserBalanceDialogProps> = ({
           <Button
             onClick={() => handleBalanceUpdate('deduct')}
             disabled={isSubmitting || typeof amount !== 'number' || amount <= 0 || currentBalance < amount}
-            className="bg-destructive hover:bg-red-700 text-white"
+            className="bg-destructive hover:brightness-95 text-destructive-foreground"
           >
             {isSubmitting && amount && amount > 0 ? (
               <>

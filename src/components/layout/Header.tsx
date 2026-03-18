@@ -63,12 +63,12 @@ const Header = () => {
           </div>
 
           <Card className="dark-gradient-card flex items-center px-2 py-1 h-9 sm:h-10">
-            <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-red-500 mr-2" />
+            <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-primary mr-2" />
             <div>
               <p className="text-[10px] sm:text-[11px] text-gray-600 font-medium">
                 Joriy Balans
               </p>
-              <p className="text-sm font-bold text-red-600">
+              <p className="text-sm font-bold text-gray-900">
                 {profile?.balance.toLocaleString() || "0"} UZS
               </p>
             </div>
@@ -106,7 +106,7 @@ const Header = () => {
               {profile && (
                 <DropdownMenuItem className="flex justify-between items-center">
                   <span>Balans:</span>
-                  <span className="font-bold text-red-600">
+                  <span className="font-bold text-gray-900">
                     {profile.balance.toLocaleString()} UZS
                   </span>
                 </DropdownMenuItem>

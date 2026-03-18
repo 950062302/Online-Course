@@ -32,7 +32,7 @@ const StatsSummaryPanel: React.FC = () => {
         </CardHeader>
         <CardContent className="p-0">
           <p className="text-3xl font-bold text-white mt-2">1,245</p>
-          <p className="text-sm text-red-500 mt-1 flex items-center">
+          <p className="text-sm text-primary mt-1 flex items-center">
             <ArrowDown className="w-4 h-4 mr-1" />
             -3.1% (o'tgan oyga nisbatan)
           </p>

@@ -114,7 +114,7 @@ const AdminLayout: React.FC = () => {
   const connectionClasses =
     connectionStatus === 'online'
       ? 'bg-green-100 text-green-700 border border-green-200'
-      : 'bg-red-100 text-red-700 border border-red-200';
+      : 'bg-white text-gray-800 border border-primary';
 
   const renderNavGroup = (group: string) => {
     return navItems
@@ -153,7 +153,7 @@ const AdminLayout: React.FC = () => {
                 <div className="flex items-center justify-between px-4 py-7 border-b border-gray-100">
                   <Link to="/" className="flex items-center space-x-2">
                     <GraduationCap className="h-8 w-8 text-primary" />
-                    <span className="text-xl font-bold text-primary">CEFR LC</span>
+                    <span className="text-xl font-bold text-primary">EduDars.uz</span>
                   </Link>
                   <Button
                     variant="ghost"
@@ -195,7 +195,7 @@ const AdminLayout: React.FC = () => {
               </div>
             </SheetContent>
           </Sheet>
-          <h1 className="text-2xl font-extrabold text-gray-800 ml-4">PLATFORMA ADMIN</h1>
+          <h1 className="text-2xl font-extrabold text-gray-800 ml-4">EduDars.uz ADMIN</h1>
         </div>
         <div className="flex items-center space-x-4">
           <span className="text-gray-600 hidden sm:inline text-sm">
@@ -219,7 +219,7 @@ const AdminLayout: React.FC = () => {
           className="bg-white text-gray-800 w-64 p-4 flex-shrink-0 hidden lg:block h-full z-20 shadow-xl overflow-y-auto border-r border-gray-200"
         >
           <div className="p-2 mb-6 border-b border-gray-100">
-            <h2 className="text-xl font-bold text-primary">CEFR LC</h2>
+            <h2 className="text-xl font-bold text-primary">EduDars.uz</h2>
           </div>
 
           <Accordion type="multiple" defaultValue={['group-main', 'group-content', 'group-communication', 'group-system']} className="w-full">

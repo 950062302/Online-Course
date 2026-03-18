@@ -90,7 +90,7 @@ const UserDeleteDialog: React.FC<UserDeleteDialogProps> = ({
           <AlertDialogAction
             onClick={handleDeleteUser}
             disabled={isDeleting}
-            className="bg-destructive hover:bg-red-700 text-white"
+            className="bg-destructive hover:brightness-95 text-destructive-foreground"
           >
             {isDeleting ? (
               <>

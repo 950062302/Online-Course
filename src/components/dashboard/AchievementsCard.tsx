@@ -19,7 +19,7 @@ const AchievementsCard: React.FC<AchievementsCardProps> = ({ level, xp }) => {
           {level}
         </div>
         <div className="flex-1">
-          <div className="w-full bg-red-100 rounded-full h-2.5 sm:h-3">
+          <div className="w-full bg-[rgba(26,255,255,0.20)] rounded-full h-2.5 sm:h-3">
             <div
               className="bg-primary h-2.5 sm:h-3 rounded-full"
               style={{ width: `${xp % 100}%` }}

@@ -1,0 +1,596 @@
+{
+  "collections": [
+    {
+      "id": "users0000000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "users",
+      "type": "auth",
+      "system": false,
+      "schema": [
+        {
+          "id": "usr_username",
+          "name": "username",
+          "type": "text",
+          "system": false,
+          "required": false,
+          "unique": true,
+          "options": { "min": 1, "max": 64, "pattern": "" }
+        },
+        {
+          "id": "usr_role",
+          "name": "role",
+          "type": "select",
+          "system": false,
+          "required": false,
+          "unique": false,
+          "options": { "maxSelect": 1, "values": ["user", "developer"] }
+        },
+        {
+          "id": "usr_balance",
+          "name": "balance",
+          "type": "number",
+          "system": false,
+          "required": false,
+          "unique": false,
+          "options": { "min": 0, "max": null, "noDecimal": true }
+        },
+        {
+          "id": "usr_score",
+          "name": "score",
+          "type": "number",
+          "system": false,
+          "required": false,
+          "unique": false,
+          "options": { "min": 0, "max": null, "noDecimal": true }
+        },
+        {
+          "id": "usr_phone",
+          "name": "phone",
+          "type": "text",
+          "system": false,
+          "required": false,
+          "unique": false,
+          "options": { "min": 0, "max": 32, "pattern": "" }
+        },
+        {
+          "id": "usr_bio",
+          "name": "bio",
+          "type": "text",
+          "system": false,
+          "required": false,
+          "unique": false,
+          "options": { "min": 0, "max": 2000, "pattern": "" }
+        },
+        {
+          "id": "usr_total_time",
+          "name": "total_time_spent_seconds",
+          "type": "number",
+          "system": false,
+          "required": false,
+          "unique": false,
+          "options": { "min": 0, "max": null, "noDecimal": true }
+        },
+        {
+          "id": "usr_streak",
+          "name": "streak",
+          "type": "number",
+          "system": false,
+          "required": false,
+          "unique": false,
+          "options": { "min": 0, "max": null, "noDecimal": true }
+        },
+        {
+          "id": "usr_xp",
+          "name": "xp",
+          "type": "number",
+          "system": false,
+          "required": false,
+          "unique": false,
+          "options": { "min": 0, "max": null, "noDecimal": true }
+        },
+        {
+          "id": "usr_level",
+          "name": "level",
+          "type": "number",
+          "system": false,
+          "required": false,
+          "unique": false,
+          "options": { "min": 0, "max": null, "noDecimal": true }
+        },
+        {
+          "id": "usr_last_checkin",
+          "name": "last_checkin_date",
+          "type": "date",
+          "system": false,
+          "required": false,
+          "unique": false,
+          "options": { "min": "", "max": "" }
+        },
+        {
+          "id": "usr_last_test",
+          "name": "last_test_date",
+          "type": "date",
+          "system": false,
+          "required": false,
+          "unique": false,
+          "options": { "min": "", "max": "" }
+        },
+        {
+          "id": "usr_last_seen",
+          "name": "last_seen_at",
+          "type": "date",
+          "system": false,
+          "required": false,
+          "unique": false,
+          "options": { "min": "", "max": "" }
+        }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {
+        "allowEmailAuth": true,
+        "allowUsernameAuth": true,
+        "allowOAuth2Auth": false,
+        "requireEmail": true,
+        "exceptEmailDomains": null,
+        "manageRule": null,
+        "minPasswordLength": 8,
+        "onlyVerified": false
+      }
+    },
+
+    {
+      "id": "messages00000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "messages",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "id": "msg_sender",
+          "name": "sender_id",
+          "type": "relation",
+          "system": false,
+          "required": true,
+          "unique": false,
+          "options": { "collectionId": "users0000000000", "cascadeDelete": false, "maxSelect": 1, "displayFields": ["username", "email"] }
+        },
+        {
+          "id": "msg_receiver",
+          "name": "receiver_id",
+          "type": "relation",
+          "system": false,
+          "required": true,
+          "unique": false,
+          "options": { "collectionId": "users0000000000", "cascadeDelete": false, "maxSelect": 1, "displayFields": ["username", "email"] }
+        },
+        {
+          "id": "msg_content",
+          "name": "content",
+          "type": "text",
+          "system": false,
+          "required": true,
+          "unique": false,
+          "options": { "min": 1, "max": 4000, "pattern": "" }
+        },
+        {
+          "id": "msg_is_read",
+          "name": "is_read",
+          "type": "bool",
+          "system": false,
+          "required": false,
+          "unique": false,
+          "options": {}
+        }
+      ],
+      "indexes": [
+        "CREATE INDEX IF NOT EXISTS idx_messages_sender_receiver_created ON messages (sender_id, receiver_id, created);",
+        "CREATE INDEX IF NOT EXISTS idx_messages_receiver_is_read ON messages (receiver_id, is_read);"
+      ],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "typing000000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "typing_events",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "id": "typ_conv",
+          "name": "conversation_key",
+          "type": "text",
+          "system": false,
+          "required": true,
+          "unique": false,
+          "options": { "min": 1, "max": 128, "pattern": "" }
+        },
+        {
+          "id": "typ_from",
+          "name": "from_user",
+          "type": "relation",
+          "system": false,
+          "required": true,
+          "unique": false,
+          "options": { "collectionId": "users0000000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["username", "email"] }
+        },
+        {
+          "id": "typ_to",
+          "name": "to_user",
+          "type": "relation",
+          "system": false,
+          "required": true,
+          "unique": false,
+          "options": { "collectionId": "users0000000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["username", "email"] }
+        }
+      ],
+      "indexes": [
+        "CREATE INDEX IF NOT EXISTS idx_typing_events_conv_to_created ON typing_events (conversation_key, to_user, created);"
+      ],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "courses000000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "courses",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "crs_title", "name": "title", "type": "text", "system": false, "required": true, "unique": false, "options": { "min": 1, "max": 160, "pattern": "" } },
+        { "id": "crs_desc", "name": "description", "type": "text", "system": false, "required": true, "unique": false, "options": { "min": 1, "max": 5000, "pattern": "" } },
+        { "id": "crs_price", "name": "price", "type": "number", "system": false, "required": true, "unique": false, "options": { "min": 0, "max": null, "noDecimal": true } },
+        { "id": "crs_image", "name": "image_url", "type": "url", "system": false, "required": false, "unique": false, "options": { "exceptDomains": null, "onlyDomains": null } },
+        { "id": "crs_category", "name": "category", "type": "text", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": 80, "pattern": "" } },
+        { "id": "crs_user", "name": "user_id", "type": "relation", "system": false, "required": false, "unique": false, "options": { "collectionId": "users0000000000", "cascadeDelete": false, "maxSelect": 1, "displayFields": ["username", "email"] } },
+        { "id": "crs_days", "name": "duration_days", "type": "number", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": null, "noDecimal": true } },
+        { "id": "crs_active", "name": "is_active", "type": "bool", "system": false, "required": false, "unique": false, "options": {} },
+        { "id": "crs_avg", "name": "average_rating", "type": "number", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": 5, "noDecimal": false } },
+        { "id": "crs_rc", "name": "review_count", "type": "number", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": null, "noDecimal": true } },
+        { "id": "crs_disc", "name": "discount_percentage", "type": "number", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": 100, "noDecimal": false } }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "parts0000000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "course_parts",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "prt_course", "name": "course_id", "type": "relation", "system": false, "required": true, "unique": false, "options": { "collectionId": "courses000000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["title"] } },
+        { "id": "prt_title", "name": "title", "type": "text", "system": false, "required": true, "unique": false, "options": { "min": 1, "max": 160, "pattern": "" } },
+        { "id": "prt_desc", "name": "description", "type": "text", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": 5000, "pattern": "" } },
+        { "id": "prt_no", "name": "part_number", "type": "number", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": null, "noDecimal": true } }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "lessons00000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "lessons",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "lsn_part", "name": "course_part_id", "type": "relation", "system": false, "required": true, "unique": false, "options": { "collectionId": "parts0000000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["title"] } },
+        { "id": "lsn_title", "name": "title", "type": "text", "system": false, "required": true, "unique": false, "options": { "min": 1, "max": 160, "pattern": "" } },
+        { "id": "lsn_desc", "name": "description", "type": "text", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": 5000, "pattern": "" } },
+        { "id": "lsn_video", "name": "video_url", "type": "url", "system": false, "required": false, "unique": false, "options": { "exceptDomains": null, "onlyDomains": null } },
+        { "id": "lsn_order", "name": "order_index", "type": "number", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": null, "noDecimal": true } }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "usercrs0000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "user_courses",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "uc_user", "name": "user_id", "type": "relation", "system": false, "required": true, "unique": false, "options": { "collectionId": "users0000000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["username", "email"] } },
+        { "id": "uc_course", "name": "course_id", "type": "relation", "system": false, "required": true, "unique": false, "options": { "collectionId": "courses000000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["title"] } },
+        { "id": "uc_price", "name": "price_at_purchase", "type": "number", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": null, "noDecimal": true } },
+        { "id": "uc_purchased", "name": "purchased_at", "type": "date", "system": false, "required": false, "unique": false, "options": { "min": "", "max": "" } }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "reviews00000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "course_reviews",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "rv_course", "name": "course_id", "type": "relation", "system": false, "required": true, "unique": false, "options": { "collectionId": "courses000000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["title"] } },
+        { "id": "rv_user", "name": "user_id", "type": "relation", "system": false, "required": true, "unique": false, "options": { "collectionId": "users0000000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["username", "email"] } },
+        { "id": "rv_rating", "name": "rating", "type": "number", "system": false, "required": true, "unique": false, "options": { "min": 1, "max": 5, "noDecimal": true } },
+        { "id": "rv_comment", "name": "comment", "type": "text", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": 4000, "pattern": "" } },
+        { "id": "rv_status", "name": "status", "type": "select", "system": false, "required": false, "unique": false, "options": { "maxSelect": 1, "values": ["pending", "approved", "rejected"] } }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "notify00000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "notifications",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "nt_msg", "name": "message", "type": "text", "system": false, "required": true, "unique": false, "options": { "min": 1, "max": 4000, "pattern": "" } },
+        { "id": "nt_read", "name": "is_read", "type": "bool", "system": false, "required": false, "unique": false, "options": {} },
+        { "id": "nt_user", "name": "user_id", "type": "relation", "system": false, "required": false, "unique": false, "options": { "collectionId": "users0000000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["username", "email"] } },
+        { "id": "nt_sentby", "name": "sent_by", "type": "relation", "system": false, "required": false, "unique": false, "options": { "collectionId": "users0000000000", "cascadeDelete": false, "maxSelect": 1, "displayFields": ["username", "email"] } }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "progress000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "user_lesson_progress",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "ulp_user", "name": "user_id", "type": "relation", "system": false, "required": true, "unique": false, "options": { "collectionId": "users0000000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["username", "email"] } },
+        { "id": "ulp_course", "name": "course_id", "type": "relation", "system": false, "required": true, "unique": false, "options": { "collectionId": "courses000000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["title"] } },
+        { "id": "ulp_lesson", "name": "lesson_id", "type": "relation", "system": false, "required": true, "unique": false, "options": { "collectionId": "lessons00000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["title"] } },
+        { "id": "ulp_done", "name": "completed_at", "type": "date", "system": false, "required": false, "unique": false, "options": { "min": "", "max": "" } }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "ieltsq0000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "ielts_questions",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "iq_lesson", "name": "lesson_id", "type": "relation", "system": false, "required": true, "unique": false, "options": { "collectionId": "lessons00000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["title"] } },
+        { "id": "iq_type", "name": "question_type", "type": "text", "system": false, "required": true, "unique": false, "options": { "min": 1, "max": 64, "pattern": "" } },
+        { "id": "iq_text", "name": "question_text", "type": "text", "system": false, "required": true, "unique": false, "options": { "min": 1, "max": 4000, "pattern": "" } },
+        { "id": "iq_opts", "name": "options", "type": "json", "system": false, "required": false, "unique": false, "options": {} },
+        { "id": "iq_pairs", "name": "matching_pairs", "type": "json", "system": false, "required": false, "unique": false, "options": {} },
+        { "id": "iq_ans", "name": "correct_answer", "type": "json", "system": false, "required": false, "unique": false, "options": {} },
+        { "id": "iq_order", "name": "order_index", "type": "number", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": null, "noDecimal": true } },
+        { "id": "iq_audio", "name": "audio_url", "type": "url", "system": false, "required": false, "unique": false, "options": { "exceptDomains": null, "onlyDomains": null } },
+        { "id": "iq_img", "name": "image_url", "type": "url", "system": false, "required": false, "unique": false, "options": { "exceptDomains": null, "onlyDomains": null } }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "subs000000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "user_exercise_submissions",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "us_user", "name": "user_id", "type": "relation", "system": false, "required": true, "unique": false, "options": { "collectionId": "users0000000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["username", "email"] } },
+        { "id": "us_ex", "name": "exercise_id", "type": "relation", "system": false, "required": true, "unique": false, "options": { "collectionId": "ieltsq0000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["question_text"] } },
+        { "id": "us_ans", "name": "submitted_answer", "type": "text", "system": false, "required": true, "unique": false, "options": { "min": 1, "max": 4000, "pattern": "" } },
+        { "id": "us_ok", "name": "is_correct", "type": "bool", "system": false, "required": false, "unique": false, "options": {} },
+        { "id": "us_at", "name": "submitted_at", "type": "date", "system": false, "required": false, "unique": false, "options": { "min": "", "max": "" } }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "apps0000000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "applications",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "ap_user", "name": "user_id", "type": "relation", "system": false, "required": false, "unique": false, "options": { "collectionId": "users0000000000", "cascadeDelete": false, "maxSelect": 1, "displayFields": ["username", "email"] } },
+        { "id": "ap_name", "name": "name", "type": "text", "system": false, "required": true, "unique": false, "options": { "min": 1, "max": 120, "pattern": "" } },
+        { "id": "ap_phone", "name": "phone", "type": "text", "system": false, "required": true, "unique": false, "options": { "min": 5, "max": 32, "pattern": "" } },
+        { "id": "ap_msg", "name": "message", "type": "text", "system": false, "required": true, "unique": false, "options": { "min": 1, "max": 4000, "pattern": "" } },
+        { "id": "ap_status", "name": "status", "type": "select", "system": false, "required": false, "unique": false, "options": { "maxSelect": 1, "values": ["pending", "contacted", "closed"] } }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "results00000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "results_images",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "ri_url", "name": "image_url", "type": "url", "system": false, "required": true, "unique": false, "options": { "exceptDomains": null, "onlyDomains": null } }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "tariffs00000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "tariffs",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "tf_title", "name": "title", "type": "text", "system": false, "required": true, "unique": false, "options": { "min": 1, "max": 160, "pattern": "" } },
+        { "id": "tf_price", "name": "price", "type": "number", "system": false, "required": true, "unique": false, "options": { "min": 0, "max": null, "noDecimal": true } },
+        { "id": "tf_desc", "name": "description", "type": "text", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": 2000, "pattern": "" } },
+        { "id": "tf_features", "name": "features", "type": "json", "system": false, "required": false, "unique": false, "options": {} },
+        { "id": "tf_type", "name": "type", "type": "select", "system": false, "required": false, "unique": false, "options": { "maxSelect": 1, "values": ["fargona", "online"] } },
+        { "id": "tf_grad", "name": "gradient_class", "type": "text", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": 200, "pattern": "" } }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "marketing000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "marketing_courses",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "mc_title", "name": "title", "type": "text", "system": false, "required": true, "unique": false, "options": { "min": 1, "max": 160, "pattern": "" } },
+        { "id": "mc_desc", "name": "description", "type": "text", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": 5000, "pattern": "" } },
+        { "id": "mc_price", "name": "price", "type": "number", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": null, "noDecimal": true } },
+        { "id": "mc_img", "name": "image_url", "type": "url", "system": false, "required": false, "unique": false, "options": { "exceptDomains": null, "onlyDomains": null } },
+        { "id": "mc_active", "name": "is_active", "type": "bool", "system": false, "required": false, "unique": false, "options": {} }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "landing0000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "landing_about",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "la_title", "name": "title", "type": "text", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": 200, "pattern": "" } },
+        { "id": "la_text", "name": "text", "type": "text", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": 8000, "pattern": "" } },
+        { "id": "la_video", "name": "video_path", "type": "text", "system": false, "required": false, "unique": false, "options": { "min": 0, "max": 300, "pattern": "" } }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    },
+
+    {
+      "id": "pushsub000000",
+      "created": "2026-03-18 00:00:00.000Z",
+      "updated": "2026-03-18 00:00:00.000Z",
+      "name": "push_subscriptions",
+      "type": "base",
+      "system": false,
+      "schema": [
+        { "id": "ps_user", "name": "user_id", "type": "relation", "system": false, "required": true, "unique": false, "options": { "collectionId": "users0000000000", "cascadeDelete": true, "maxSelect": 1, "displayFields": ["username", "email"] } },
+        { "id": "ps_ep", "name": "endpoint", "type": "text", "system": false, "required": true, "unique": true, "options": { "min": 1, "max": 2000, "pattern": "" } },
+        { "id": "ps_keys", "name": "keys", "type": "json", "system": false, "required": false, "unique": false, "options": {} }
+      ],
+      "indexes": [],
+      "listRule": "",
+      "viewRule": "",
+      "createRule": "",
+      "updateRule": "",
+      "deleteRule": "",
+      "options": {}
+    }
+  ]
+}
+

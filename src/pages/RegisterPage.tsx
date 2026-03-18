@@ -89,14 +89,12 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div className="ui-root">
-      <div className="relative z-10 min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-red-50 via-white to-red-50">
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-4 bg-white">
         <div className="w-full max-w-md">
            {/* Logo va sarlavha */}
            <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl mb-4 shadow-lg">
-              <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
-              </svg>
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-primary rounded-2xl mb-4 shadow-lg border border-[rgba(0,0,0,0.08)]">
+              <span className="text-base font-extrabold text-primary-foreground">EduDars.uz</span>
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Ro'yxatdan o'tish</h1>
             <p className="text-gray-600">Yangi hisob yarating</p>
@@ -120,12 +118,12 @@ const RegisterPage: React.FC = () => {
                   <input
                     required
                     placeholder="Foydalanuvchi nomi"
-                    className={`block w-full pl-10 pr-3 py-3 border ${errors.username ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors`}
+                    className={`block w-full pl-10 pr-3 py-3 border ${errors.username ? 'border-primary' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors`}
                     type="text"
                     {...register("username")}
                   />
                 </div>
-                {errors.username && <p className="mt-1 text-sm text-red-600">{errors.username.message}</p>}
+                {errors.username && <p className="mt-1 text-sm text-primary">{errors.username.message}</p>}
               </div>
 
               {/* Email Input */}
@@ -142,12 +140,12 @@ const RegisterPage: React.FC = () => {
                   <input
                     required
                     placeholder="name@example.com"
-                    className={`block w-full pl-10 pr-3 py-3 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors`}
+                    className={`block w-full pl-10 pr-3 py-3 border ${errors.email ? 'border-primary' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors`}
                     type="email"
                     {...register("email")}
                   />
                 </div>
-                {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
+                {errors.email && <p className="mt-1 text-sm text-primary">{errors.email.message}</p>}
               </div>
 
               {/* Password Input */}
@@ -164,7 +162,7 @@ const RegisterPage: React.FC = () => {
                   <input
                     required
                     placeholder="•••••••"
-                    className={`block w-full pl-10 pr-10 py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors`}
+                    className={`block w-full pl-10 pr-10 py-3 border ${errors.password ? 'border-primary' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors`}
                     type={showPassword ? "text" : "password"}
                     {...register("password")}
                   />
@@ -181,7 +179,7 @@ const RegisterPage: React.FC = () => {
                     </svg>
                   </button>
                 </div>
-                {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>}
+                {errors.password && <p className="mt-1 text-sm text-primary">{errors.password.message}</p>}
               </div>
 
               {/* Confirm Password Input */}
@@ -198,7 +196,7 @@ const RegisterPage: React.FC = () => {
                   <input
                     required
                     placeholder="•••••••"
-                    className={`block w-full pl-10 pr-10 py-3 border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors`}
+                    className={`block w-full pl-10 pr-10 py-3 border ${errors.confirmPassword ? 'border-primary' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors`}
                     type={showConfirmPassword ? "text" : "password"}
                     {...register("confirmPassword")}
                   />
@@ -215,24 +213,24 @@ const RegisterPage: React.FC = () => {
                     </svg>
                   </button>
                 </div>
-                {errors.confirmPassword && <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>}
+                {errors.confirmPassword && <p className="mt-1 text-sm text-primary">{errors.confirmPassword.message}</p>}
               </div>
 
             </div>
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-[1.02] shadow-lg mt-8"
+              className="w-full bg-primary text-primary-foreground py-3 px-4 rounded-lg font-semibold hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200 transform hover:scale-[1.02] shadow-lg mt-8"
             >
               Hisob yaratish
             </button>
 
             <div className="mt-6 text-center space-y-2">
-              <Link to="/login" className="text-sm text-gray-600 hover:text-red-600 transition-colors">
+              <Link to="/login" className="text-sm text-gray-600 hover:text-primary transition-colors">
                 Hisobingiz bormi? <span className="font-medium">Kirish</span>
               </Link>
               <div>
-                <Link to="/" className="text-sm text-gray-600 hover:text-red-600 transition-colors">
+                <Link to="/" className="text-sm text-gray-600 hover:text-primary transition-colors">
                   Bosh sahifaga qaytish
                 </Link>
               </div>

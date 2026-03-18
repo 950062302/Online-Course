@@ -149,7 +149,7 @@ const UserNotifications: React.FC = () => {
             ></path>
           </svg>
           {unreadCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-white" />
+            <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-primary border-2 border-white" />
           )}
         </Button>
       </DropdownMenuTrigger>
@@ -190,7 +190,7 @@ const UserNotifications: React.FC = () => {
                 key={notification.id}
                 className={`flex flex-col items-start p-3 cursor-pointer ${
                   !notification.is_read
-                    ? "bg-red-50/50 hover:bg-red-100"
+                    ? "bg-[rgba(26,255,255,0.10)] hover:bg-[rgba(26,255,255,0.18)]"
                     : "hover:bg-gray-50"
                 }`}
                 onClick={() =>

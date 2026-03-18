@@ -68,9 +68,9 @@ const ResultsCarousel: React.FC = () => {
       <div className="results-carousel-wrapper">
         <section id="natijalar" className="py-16 sm:py-24 bg-white content-layer">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <ScrollFloat tag="h2" containerClassName="text-base text-primary-purple font-semibold tracking-wide uppercase">Bizning Natijalarimiz</ScrollFloat>
+            <ScrollFloat tag="h2" containerClassName="text-base text-primary font-semibold tracking-wide uppercase">Bizning natijalarimiz</ScrollFloat>
             <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-              O'quvchilarimiz doimiy ravishta yuqori natijali IELTS sertifikatlarini qolga kirib o'z keshbeklarini qabul qilib olishadi
+              O‘quvchilarimiz doimiy ravishda yuqori natijalarga erishib, o‘z yutuqlarini namoyish qilishadi.
             </p>
             <div className="mt-10 flex justify-center items-center h-64">
               <LoadingSpinner />
@@ -92,7 +92,7 @@ const ResultsCarousel: React.FC = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <ScrollFloat tag="h2" containerClassName="text-base text-primary font-semibold tracking-wide uppercase">Bizning natijalarimiz!</ScrollFloat>
             <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-              O'quvchilarimiz doimiy ravishta yuqori natijali IELTS sertifikatlarini qolga kirib o'z keshbeklarini qabul qilib olishadi
+              O‘quvchilarimiz doimiy ravishda yuqori natijalarga erishib, o‘z yutuqlarini namoyish qilishadi.
             </p>
 
             <div className="mt-10 carousel-container">
@@ -144,7 +144,7 @@ const ResultsCarousel: React.FC = () => {
                     <path d="M17.684 2.184a.283.283 0 01.531 0l.914 2.468c.028.078.09.14.167.168l2.468.913a.283.283 0 010 .531l-2.468.914a.283.283 0 00-.167.167l-.914 2.468a.283.283 0 01-.531 0l-.913-2.468a.283.283 0 00-.168-.167l-2.468-.914a.283.283 0 010-.53l2.468-.914a.283.283 0 00.168-.168l.913-2.468zM9.306 6.71a.554.554 0 011.04 0l1.787 4.83a.555.555 0 00.328.327l4.83 1.787a.554.554 0 010 1.04l-4.83 1.787a.554.554 0 00-.328.327l-1.787 4.83a.554.554 0 01-1.04 0l-1.787-4.83a.554.554 0 00-.327-.327l-4.83-1.787a.554.554 0 010-1.04l4.83-1.787a.555.555 0 00.327-.328l1.787-4.83z" fill="#fff"></path>
                   </svg>
                 </span>
-                CEFR olish
+                Kurslarni ko‘rish
               </Link>
             </div>
           </div>

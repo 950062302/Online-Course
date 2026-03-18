@@ -30,8 +30,8 @@ const Sidebar = () => {
   return (
     <div className="hidden border-r bg-white lg:block text-gray-800 w-64 flex-shrink-0 flex-col p-4 shadow-2xl"> {/* Changed bg-[#1a232f] to bg-white, text-white to text-gray-800 */}
       <div className="mb-8 p-2">
-        <Link to="/" className="text-xl font-bold tracking-wider text-primary-purple" relative="path">
-          CEFR LC
+        <Link to="/" className="text-xl font-bold tracking-wider text-primary" relative="path">
+          EduDars.uz
         </Link>
         <p className="text-sm text-gray-500 mt-1 ml-2">Profil menyusi</p> {/* Adjusted styling */}
       </div>
@@ -53,7 +53,7 @@ const Sidebar = () => {
       </nav>
 
       <div className="mt-auto pt-8 text-center text-xs text-gray-500">
-        &copy; 2024 CEFR LC. Barcha huquqlar himoyalangan.
+        &copy; {new Date().getFullYear()} EduDars.uz. Barcha huquqlar himoyalangan.
       </div>
     </div>
   );

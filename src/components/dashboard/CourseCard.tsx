@@ -153,7 +153,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
             </div>
             <Progress
               value={progress}
-              className="h-1.5 sm:h-2 bg-gray-200 [&::-webkit-progress-bar]:bg-ferrari-red [&::-webkit-progress-value]:bg-ferrari-red"
+              className="h-1.5 sm:h-2 bg-[rgba(26,255,255,0.20)]"
             />
             {expirationDateFormatted && (
               <p className="text-[11px] sm:text-xs text-gray-500">
@@ -195,7 +195,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
               </div>
             </div>
             <Button
-              className="w-full py-2 text-sm sm:py-2.5 sm:text-base text-white font-semibold rounded-lg bg-ferrari-red hover:bg-red-700 transition duration-200"
+              className="w-full py-2 text-sm sm:py-2.5 sm:text-base text-primary-foreground font-semibold rounded-lg bg-ferrari-red hover:brightness-95 transition duration-200"
               onClick={() => navigate(`/courses/${id}`)}
               disabled={isExpired}
             >
@@ -204,7 +204,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
           </>
         ) : (
           <Button
-            className="w-full py-2 text-sm sm:py-2.5 sm:text-base text-white font-semibold rounded-lg bg-ferrari-red hover:bg-red-700 transition duration-200"
+            className="w-full py-2 text-sm sm:py-2.5 sm:text-base text-primary-foreground font-semibold rounded-lg bg-ferrari-red hover:brightness-95 transition duration-200"
             onClick={() => navigate(`/courses/${id}`)}
           >
             Kursni ko'rish
@@ -227,7 +227,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
       <Dialog open={isDescriptionDialogOpen} onOpenChange={setIsDescriptionDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle className="text-ferrari-red text-base sm:text-lg">
+            <DialogTitle className="text-primary text-base sm:text-lg">
               {title} haqida
             </DialogTitle>
             <DialogDescription className="text-sm text-gray-600">

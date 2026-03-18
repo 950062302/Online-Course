@@ -9,10 +9,10 @@ const HeroSection: React.FC = () => {
         {/* Matn qismi */}
         <div className="lg:w-1/2 mb-10 lg:mb-0 text-left">
           <h1 className="text-2xl sm:text-4xl lg:text-6xl font-extrabold text-gray-900 leading-tight">
-            <span className="text-primary">CEFR ONLINE</span> — Sizning kelajagingiz uchun mustahkam poydevor!
+            <span className="text-primary">EduDars.uz</span> — Sizning kelajagingiz uchun mustahkam poydevor!
           </h1>
           <p className="mt-4 text-base sm:text-xl text-gray-600 max-w-lg lg:mx-0">
-            Onlayn video darsliklarimiz orqali fanlarni chuqur o‘rganing va o‘z CEFR darajangizni bosqichma-bosqich oshirib boring.
+            Onlayn video darsliklarimiz orqali fanlarni chuqur o‘rganing va maqsadingizga bosqichma-bosqich yaqinlashing.
           </p>
           <div className="mt-8 flex justify-between">
             <a href="#kurslar" className="inline-flex items-center justify-center px-6 py-2 text-sm sm:px-8 sm:py-3 sm:text-base font-medium rounded-full shadow-lg text-white bg-primary hover:bg-primary-dark transform transition duration-300 hover:scale-105">
