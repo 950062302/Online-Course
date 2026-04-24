@@ -1,50 +1,70 @@
 import React from 'react';
 import TrueFocus from '@/components/TrueFocus';
-import ScrollFloat from '@/components/ScrollFloat';
+import { ArrowRight, Sparkles, Star } from 'lucide-react';
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="bg-white py-16 sm:py-24 lg:py-32 content-layer relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center justify-between relative z-10">
-        {/* Matn qismi */}
-        <div className="lg:w-1/2 mb-10 lg:mb-0 text-left">
-          <h1 className="text-2xl sm:text-4xl lg:text-6xl font-extrabold text-gray-900 leading-tight">
-            <span className="text-primary">EduDars.uz</span> — Sizning kelajagingiz uchun mustahkam poydevor!
-          </h1>
-          <p className="mt-4 text-base sm:text-xl text-gray-600 max-w-lg lg:mx-0">
-            Onlayn video darsliklarimiz orqali fanlarni chuqur o‘rganing va maqsadingizga bosqichma-bosqich yaqinlashing.
-          </p>
-          <div className="mt-8 flex justify-between">
-            <a href="#kurslar" className="inline-flex items-center justify-center px-6 py-2 text-sm sm:px-8 sm:py-3 sm:text-base font-medium rounded-full shadow-lg text-white bg-primary hover:bg-primary-dark transform transition duration-300 hover:scale-105">
-              Kurslarni ko‘rish
-            </a>
-            <a href="#afzalliklar" className="animated-button px-6 py-2">
-              <svg viewBox="0 0 24 24" className="arr-2" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-                ></path>
-              </svg>
-              <span className="text text-sm">Afzalliklarimiz</span>
-              <span className="circle"></span>
-              <svg viewBox="0 0 24 24" className="arr-1" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-                ></path>
-              </svg>
-            </a>
+    <section className="relative overflow-hidden bg-gradient-to-br from-white via-cyan-50/60 to-white py-16 sm:py-24 lg:py-32 content-layer">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(26,255,255,0.18),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(26,255,255,0.12),transparent_35%)]" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-white/80 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm backdrop-blur">
+              <Sparkles className="h-4 w-4 text-primary" />
+              Premium onlayn ta'lim muhit
+            </div>
+
+            <h1 className="mt-6 text-3xl sm:text-5xl lg:text-7xl font-black tracking-tight text-gray-950 leading-tight">
+              <span className="bg-gradient-to-r from-primary via-cyan-400 to-cyan-500 bg-clip-text text-transparent">EduDars.uz</span>
+              <br />
+              kelajagingizni tezroq quradi
+            </h1>
+
+            <p className="mt-6 text-base sm:text-xl text-gray-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+              Zamonaviy kurslar, aniq natijalar va qulay platforma bilan bilim olishni yanada samarali va yoqimli qiling.
+            </p>
+
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <a
+                href="#application-form"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-base font-semibold text-white shadow-lg shadow-cyan-200 transition-transform duration-300 hover:-translate-y-1 hover:bg-primary-dark"
+              >
+                Ariza qoldirish
+                <ArrowRight className="h-4 w-4" />
+              </a>
+              <a
+                href="#kurslar"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-cyan-200 bg-white px-6 py-4 text-base font-semibold text-gray-900 shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:border-cyan-300 hover:bg-cyan-50"
+              >
+                Kurslarni ko‘rish
+              </a>
+            </div>
+
+            <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-3 text-sm text-gray-600">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-sm border border-gray-100">
+                <Star className="h-4 w-4 text-amber-400" />
+                Kuchli o‘quv tizimi
+              </div>
+              <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-sm border border-gray-100">
+                <Star className="h-4 w-4 text-amber-400" />
+                Mobilga mos
+              </div>
+            </div>
           </div>
-        </div>
-        {/* TrueFocus komponenti */}
-        <div className="lg:w-1/2 flex justify-center lg:justify-end p-4">
-          <div className="bg-primary rounded-2xl shadow-2xl flex items-center justify-center w-full max-w-md h-64">
-            <TrueFocus
-              sentence="Online Ta'lim"
-              blurAmount={3}
-              borderColor="#FFFFFF"
-              glowColor="rgba(255, 255, 255, 0.6)"
-              animationDuration={0.8}
-              pauseBetweenAnimations={1.5}
-            />
+
+          <div className="flex justify-center lg:justify-end">
+            <div className="w-full max-w-xl rounded-[2rem] border border-cyan-100 bg-white p-4 shadow-[0_25px_80px_rgba(26,255,255,0.18)]">
+              <div className="rounded-[1.5rem] bg-gradient-to-br from-primary to-cyan-500 p-8 sm:p-10 text-white min-h-[340px] flex items-center justify-center">
+                <TrueFocus
+                  sentence="Online Ta'lim"
+                  blurAmount={3}
+                  borderColor="#FFFFFF"
+                  glowColor="rgba(255, 255, 255, 0.6)"
+                  animationDuration={0.8}
+                  pauseBetweenAnimations={1.5}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -15,9 +15,13 @@ import ScrollFadeIn from '@/components/ui/ScrollFadeIn';
 
 const LandingPage: React.FC = () => {
   return (
-    <div className="antialiased relative min-h-screen">
+    <div className="antialiased relative min-h-screen bg-gradient-to-b from-white via-cyan-50/30 to-white">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-white">
+        Kontentga o‘tish
+      </a>
+      <div id="top" />
       <LandingPageHeader />
-      <main className="content-layer">
+      <main id="main-content" className="content-layer">
         <ScrollFadeIn>
           <HeroSection />
         </ScrollFadeIn>
@@ -33,15 +37,25 @@ const LandingPage: React.FC = () => {
         <ScrollFadeIn>
           <TariffsSection />
         </ScrollFadeIn>
-        <ScrollFadeIn>
-          <CoursesSection />
-        </ScrollFadeIn>
-        <ScrollFadeIn>
-          <AdvantagesSection />
-        </ScrollFadeIn>
-        <ScrollFadeIn>
-          <ContactSection />
-        </ScrollFadeIn>
+
+        <section id="kurslar">
+          <ScrollFadeIn>
+            <CoursesSection />
+          </ScrollFadeIn>
+        </section>
+
+        <section id="afzalliklar">
+          <ScrollFadeIn>
+            <AdvantagesSection />
+          </ScrollFadeIn>
+        </section>
+
+        <section id="aloqa">
+          <ScrollFadeIn>
+            <ContactSection />
+          </ScrollFadeIn>
+        </section>
+
         <section id="application-form" className="py-16 sm:py-24 bg-white content-layer">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollFadeIn>

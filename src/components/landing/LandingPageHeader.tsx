@@ -5,116 +5,101 @@ import { Link } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu, LogIn, UserPlus } from 'lucide-react';
-import './LandingPageHeader.css'; // Import custom CSS
+import './LandingPageHeader.css';
 
 const LandingPageHeader: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { label: "Bosh sahifa", href: "#" },
+    { label: "Bosh sahifa", href: "#top" },
     { label: "Kurslar", href: "#kurslar" },
     { label: "Biz haqimizda", href: "#afzalliklar" },
     { label: "Aloqa", href: "#aloqa" },
   ];
 
   const handleNavItemClick = (href: string) => {
-    if (href.startsWith('#') && href.length > 1) {
-      const element = document.getElementById(href.substring(1));
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else if (href === '#') {
+    if (href === '#top') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (href.startsWith('#')) {
+      const element = document.getElementById(href.substring(1));
+      element?.scrollIntoView({ behavior: 'smooth' });
     }
     setIsMobileMenuOpen(false);
   };
 
   return (
-    <header className="bg-white/90 backdrop-blur-sm shadow-lg sticky top-0 z-50 content-layer">
+    <header className="sticky top-0 z-50 border-b border-cyan-100 bg-white/80 backdrop-blur-xl content-layer">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary to-transparent" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4 md:justify-start md:space-x-10">
-          {/* Logotip */}
-          <div className="flex justify-start lg:w-0 lg:flex-1">
-            <Link to="/" className="text-3xl font-extrabold tracking-tight">
-              <span className="text-primary">EduDars.uz</span>
-            </Link>
-          </div>
+        <div className="flex items-center justify-between py-4">
+          <Link to="/" className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            <span className="bg-gradient-to-r from-primary to-cyan-500 bg-clip-text text-transparent">EduDars.uz</span>
+          </Link>
 
-          {/* Navigatsiya (Katta ekranlar uchun) */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
                 onClick={() => handleNavItemClick(item.href)}
-                className="text-base font-medium text-gray-700 hover:text-primary transition-colors duration-150"
+                className="text-sm font-semibold text-gray-700 transition-colors hover:text-primary"
               >
                 {item.label}
               </Link>
             ))}
           </nav>
 
-          {/* Kirish tugmalari (Katta ekranlar uchun) */}
-          <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-4">
-            <Link to="/login" className="text-base font-medium text-gray-700 hover:text-primary transition-colors duration-150">
+          <div className="hidden md:flex items-center gap-3">
+            <Link to="/login" className="text-sm font-semibold text-gray-700 hover:text-primary transition-colors">
               Kirish
             </Link>
-            <Link to="/register" className="whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-md text-base font-medium text-white bg-primary hover:bg-primary-dark transition duration-150">
+            <Link to="/register" className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-cyan-200 transition-transform hover:-translate-y-0.5 hover:bg-primary-dark">
               Ro'yxatdan o'tish
             </Link>
           </div>
 
-          {/* Mobil menyu tugmasi (Kichik ekranlar uchun) */}
-          <div className="flex items-center md:hidden">
+          <div className="md:hidden">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-gray-800 p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                <Button variant="ghost" size="icon" className="rounded-full border border-cyan-100 bg-white/80 text-gray-800 hover:bg-cyan-50">
                   <Menu className="h-6 w-6" />
                   <span className="sr-only">Toggle navigation menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-64 bg-white p-4 flex flex-col">
-                <div className="flex items-center justify-between px-2 py-4 border-b border-gray-200">
-                  <Link
-                    to="/"
-                    className="text-2xl font-extrabold tracking-tight text-primary"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
+              <SheetContent side="left" className="w-80 border-cyan-100 bg-white p-5">
+                <div className="flex items-center justify-between pb-4 border-b border-cyan-100">
+                  <Link to="/" className="text-2xl font-extrabold tracking-tight text-primary" onClick={() => setIsMobileMenuOpen(false)}>
                     EduDars.uz
                   </Link>
                 </div>
 
-                {/* Navigatsiya menyusi */}
-                <nav className="flex-grow mt-4">
-                  <div className="space-y-2">
-                    {navItems.map((item) => (
-                      <Link
-                        key={item.href}
-                        to={item.href}
-                        className="flex items-center px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-primary transition-colors"
-                        onClick={() => handleNavItemClick(item.href)}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
+                <nav className="mt-6 space-y-2">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      to={item.href}
+                      onClick={() => handleNavItemClick(item.href)}
+                      className="block rounded-xl px-4 py-3 text-base font-medium text-gray-700 hover:bg-cyan-50 hover:text-primary"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
                 </nav>
 
-                {/* Mobil Kirish/Ro'yxatdan o'tish tugmalari pastki qismda */}
-                <div className="mt-4 pt-3 border-t border-gray-200 space-y-2">
+                <div className="mt-6 space-y-3 border-t border-cyan-100 pt-5">
                   <Link
                     to="/login"
-                    className="w-full flex items-center justify-center px-3 py-1.5 border border-primary rounded-lg text-sm font-medium text-primary bg-white hover:bg-[rgba(26,255,255,0.12)] transition duration-150"
+                    className="flex items-center justify-center gap-2 rounded-full border border-cyan-200 bg-white px-4 py-3 text-sm font-semibold text-primary hover:bg-cyan-50"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <LogIn className="h-4 w-4 mr-2" /> Kirish
+                    <LogIn className="h-4 w-4" /> Kirish
                   </Link>
                   <Link
                     to="/register"
-                    className="w-full flex items-center justify-center px-3 py-1.5 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-primary hover:bg-primary-dark transition duration-150"
+                    className="flex items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-white shadow-md shadow-cyan-200 hover:bg-primary-dark"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <UserPlus className="h-4 w-4 mr-2" /> Ro'yxatdan o'tish
+                    <UserPlus className="h-4 w-4" /> Ro'yxatdan o'tish
                   </Link>
                 </div>
               </SheetContent>

@@ -57,7 +57,7 @@ const CoursesSection: React.FC = () => {
         {isLoading ? (
           <p className="text-center mt-12">Kurslar yuklanmoqda...</p>
         ) : (
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
             {coursesData.map(course => (
               <MarketingCourseCard
                 key={course.id}
@@ -76,8 +76,8 @@ const CoursesSection: React.FC = () => {
         )}
 
         <div className="mt-12 text-center">
-          <a href="/courses" className="text-lg font-medium text-primary hover:text-primary-dark transition duration-150 border-b-2 border-primary pb-1">
-            Barcha kurslarni ko'rish &rarr;
+          <a href="/courses" className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-base font-semibold text-white shadow-md shadow-cyan-200 transition-transform hover:-translate-y-0.5 hover:bg-primary-dark">
+            Barcha kurslarni ko'rish
           </a>
         </div>
       </div>

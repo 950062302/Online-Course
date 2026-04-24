@@ -13,11 +13,11 @@ const ContactSection: React.FC = () => {
         <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
           Agar savollaringiz bo‘lsa, bemalol biz bilan bog‘laning yoki istalgan kursni sinab ko‘ring.
         </p>
-        <div className="mt-8 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-          <a href="#kurslar" className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-primary bg-white hover:bg-gray-50 transition duration-300 transform hover:scale-105"> {/* Changed to primary */}
+        <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+          <a href="#kurslar" className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-semibold rounded-full shadow-sm text-gray-900 bg-cyan-50 hover:bg-cyan-100 transition duration-300 transform hover:scale-105">
             Barcha kurslar
           </a>
-          <a href="tel:+998931273300" className="inline-flex items-center justify-center px-6 py-3 border border-primary text-base font-medium rounded-full text-primary hover:bg-primary hover:text-white transition duration-300 transform hover:scale-105"> {/* Changed to primary */}
+          <a href="tel:+998931273300" className="inline-flex items-center justify-center px-6 py-3 border border-primary text-base font-semibold rounded-full text-primary hover:bg-primary hover:text-white transition duration-300 transform hover:scale-105">
             Biz bilan bog‘lanish
           </a>
         </div>
