@@ -13,7 +13,7 @@ import CourseStatsCard from "@/components/dashboard/CourseStatsCard";
 import UserStreakCard from "@/components/dashboard/UserStreakCard";
 import { supabase } from '@/integrations/supabase/client';
 import { Input } from "@/components/ui/input";
-import { BookOpen, MessageCircle, History, User as UserIcon } from "lucide-react";
+import { BookOpen, MessageCircle, History, Sparkles, ArrowRight } from "lucide-react";
 
 const DashboardOverview: React.FC = () => {
   const { session, isLoading: isSessionLoading, user, profile } = useSession();
@@ -27,7 +27,6 @@ const DashboardOverview: React.FC = () => {
     }
   }, [session, isSessionLoading, navigate]);
 
-  // Fetch purchased courses count
   useEffect(() => {
     const fetchCourseCounts = async () => {
       if (!user) return;
@@ -43,9 +42,7 @@ const DashboardOverview: React.FC = () => {
         setPurchasedCoursesCount(count || 0);
       }
     };
-    if (user) {
-      fetchCourseCounts();
-    }
+    if (user) fetchCourseCounts();
   }, [user]);
 
   if (isSessionLoading || !session || !profile) {
@@ -57,137 +54,82 @@ const DashboardOverview: React.FC = () => {
   }
 
   const displayName = profile.username || user?.email?.split("@")[0] || "Foydalanuvchi";
+  const quickActions = [
+    { label: "Faol kurslar", icon: BookOpen, href: "/dashboard/active-courses" },
+    { label: "Barcha kurslar", icon: BookOpen, href: "/courses" },
+    { label: "Tarix", icon: History, href: "/dashboard/history" },
+    { label: "Chat", icon: MessageCircle, href: "/dashboard/chat" },
+  ];
 
   return (
     <div className="ui-root">
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-4 md:py-8">
-        {/* MOBILE HOME (only for < md) */}
-        <div className="md:hidden space-y-4">
-          {/* Top hero - red & white gradient */}
-          <div className="rounded-2xl bg-gradient-to-br from-ferrari-red to-ferrari-red text-black p-4 shadow-md border border-[rgba(26,255,255,0.35)]">
-            <p className="text-[11px] font-semibold opacity-90">EduDars.uz</p>
-            <h2 className="mt-1 text-xl font-extrabold leading-snug">
-              Salom, {displayName}!
-            </h2>
-            <p className="mt-1 text-[11px] opacity-90">
-              O‘qishni tez va qulay davom ettiring.
-            </p>
-            <p className="mt-2 text-xs font-medium">
-              Sizning balansingiz:{" "}
-              <span className="font-bold">
-                {profile.balance.toLocaleString()} UZS
-              </span>
-            </p>
-          </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-4 md:py-8 space-y-6">
+        <section className="overflow-hidden rounded-[2rem] border border-cyan-100 bg-gradient-to-br from-cyan-50 via-white to-white p-5 sm:p-8 shadow-[0_20px_60px_rgba(26,255,255,0.10)]">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-medium text-gray-600 shadow-sm border border-cyan-100">
+                <Sparkles className="h-4 w-4 text-primary" />
+                EduDars.uz shaxsiy kabineti
+              </div>
+              <h2 className="mt-4 text-3xl sm:text-4xl font-black tracking-tight text-gray-950">
+                Salom, {displayName}!
+              </h2>
+              <p className="mt-3 max-w-2xl text-gray-600 text-base sm:text-lg">
+                O‘qishni davom ettirish uchun tezkor kirishlar, statistikalar va profil boshqaruvi bir joyda.
+              </p>
+            </div>
 
-          {/* Search bar */}
-          <div className="w-full">
-            <Input
-              placeholder="Kurs, mavzu yoki bo'lim qidiring..."
-              className="h-9 text-xs bg-white border border-gray-200 rounded-xl shadow-sm"
-            />
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full max-w-md">
+              <button onClick={() => navigate("/dashboard/active-courses")} className="rounded-2xl bg-primary px-4 py-3 text-left text-white shadow-md shadow-cyan-200 transition-transform hover:-translate-y-0.5">
+                <span className="block text-sm opacity-90">Faol kurslar</span>
+                <span className="mt-1 flex items-center gap-2 text-lg font-semibold"><ArrowRight className="h-4 w-4" /> Ochish</span>
+              </button>
+              <button onClick={() => navigate("/courses")} className="rounded-2xl border border-cyan-200 bg-white px-4 py-3 text-left text-gray-900 shadow-sm transition-transform hover:-translate-y-0.5 hover:bg-cyan-50">
+                <span className="block text-sm text-gray-500">Yangi kurslar</span>
+                <span className="mt-1 text-lg font-semibold">Ko‘rish</span>
+              </button>
+            </div>
           </div>
+        </section>
 
-          {/* Quick actions 4x4 style */}
-          <div className="grid grid-cols-4 gap-3">
-            <button
-              type="button"
-              onClick={() => navigate("/dashboard/active-courses")}
-              className="flex flex-col items-center justify-center bg-white border border-[rgba(26,255,255,0.45)] rounded-xl py-2 shadow-sm active:scale-[0.98] transition"
-            >
-              <BookOpen className="h-5 w-5 text-ferrari-red mb-1" />
-              <span className="text-[10px] font-medium text-gray-800 text-center">
-                Faol kurslar
-              </span>
+        <div className="grid gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {quickActions.map((item) => (
+            <button key={item.href} type="button" onClick={() => navigate(item.href)} className="flex items-center gap-3 rounded-2xl border border-cyan-100 bg-white p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div className="rounded-2xl bg-cyan-50 p-3 text-primary">
+                <item.icon className="h-5 w-5" />
+              </div>
+              <span className="font-semibold text-gray-800">{item.label}</span>
             </button>
-            <button
-              type="button"
-              onClick={() => navigate("/courses")}
-              className="flex flex-col items-center justify-center bg-white border border-[rgba(26,255,255,0.45)] rounded-xl py-2 shadow-sm active:scale-[0.98] transition"
-            >
-              <BookOpen className="h-5 w-5 text-ferrari-red mb-1" />
-              <span className="text-[10px] font-medium text-gray-800 text-center">
-                Barcha kurslar
-              </span>
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/dashboard/history")}
-              className="flex flex-col items-center justify-center bg-white border border-[rgba(26,255,255,0.45)] rounded-xl py-2 shadow-sm active:scale-[0.98] transition"
-            >
-              <History className="h-5 w-5 text-ferrari-red mb-1" />
-              <span className="text-[10px] font-medium text-gray-800 text-center">
-                Tarix
-              </span>
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/dashboard/chat")}
-              className="flex flex-col items-center justify-center bg-white border border-[rgba(26,255,255,0.45)] rounded-xl py-2 shadow-sm active:scale-[0.98] transition"
-            >
-              <MessageCircle className="h-5 w-5 text-ferrari-red mb-1" />
-              <span className="text-[10px] font-medium text-gray-800 text-center">
-                Chat
-              </span>
-            </button>
-          </div>
-
-          {/* Mobile compact cards below quick actions */}
-          <div className="grid grid-cols-2 gap-3">
-            <ProfileInfoCard
-              username={profile.username}
-              email={user?.email || null}
-              balance={profile.balance}
-            />
-            <TotalTimeSpentCard
-              totalTimeSpentSeconds={profile.total_time_spent_seconds || 0}
-            />
-            <DailyCheckinCard />
-            <UserStreakCard streak={profile.streak || 0} />
-          </div>
-
-          <div className="space-y-3">
-            <AchievementsCard level={profile.level || 0} xp={profile.xp || 0} />
-            <CourseStatsCard purchasedCoursesCount={purchasedCoursesCount} />
-            <ContactCards />
-          </div>
+          ))}
         </div>
 
-        {/* DESKTOP/TABLET DASHBOARD (>= md) */}
-        <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Profil ma'lumotlari kartasi */}
-          <ProfileInfoCard
-            username={profile.username}
-            email={user?.email || null}
-            balance={profile.balance}
+        <div className="w-full max-w-xl">
+          <Input
+            placeholder="Kurs, mavzu yoki bo'lim qidiring..."
+            className="h-11 rounded-2xl bg-white border-cyan-100 shadow-sm"
           />
+        </div>
 
-          {/* Umumiy sarflangan vaqt kartasi */}
-          <TotalTimeSpentCard
-            totalTimeSpentSeconds={profile.total_time_spent_seconds || 0}
-          />
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+          <div className="space-y-6 xl:col-span-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <ProfileInfoCard
+                username={profile.username}
+                email={user?.email || null}
+                balance={profile.balance}
+              />
+              <TotalTimeSpentCard totalTimeSpentSeconds={profile.total_time_spent_seconds || 0} />
+              <DailyCheckinCard />
+              <UserStreakCard streak={profile.streak || 0} />
+            </div>
 
-          {/* Daily Check-in kartasi */}
-          <DailyCheckinCard />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <AchievementsCard level={profile.level || 0} xp={profile.xp || 0} />
+              <CourseStatsCard purchasedCoursesCount={purchasedCoursesCount} />
+            </div>
+          </div>
 
-          {/* Sizning Yutuqlaringiz kartasi */}
-          <AchievementsCard
-            level={profile.level || 0}
-            xp={profile.xp || 0}
-          />
-
-          {/* Kurslar Statistikasi kartasi */}
-          <CourseStatsCard
-            purchasedCoursesCount={purchasedCoursesCount}
-          />
-
-          {/* Streak kartasi */}
-          <UserStreakCard
-            streak={profile.streak || 0}
-          />
-
-          {/* ContactCards komponenti */}
-          <div className="col-span-full">
+          <div className="space-y-4">
             <ContactCards />
           </div>
         </div>

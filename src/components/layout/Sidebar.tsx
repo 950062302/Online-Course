@@ -7,12 +7,10 @@ import {
   History,
   Award,
   User,
-  LogOut,
   MessageCircle,
-  ShoppingBag, // New Icon
+  ShoppingBag,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import './Sidebar.css'; // Import custom CSS
+import './Sidebar.css';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -20,7 +18,7 @@ const Sidebar = () => {
   const navItems = [
     { label: "Boshqaruv Paneli", href: "/dashboard", icon: LayoutDashboard },
     { label: "Mening Kurslarim", href: "/dashboard/active-courses", icon: BookOpen },
-    { label: "Barcha Kurslar", href: "/courses", icon: ShoppingBag }, // New Item
+    { label: "Barcha Kurslar", href: "/courses", icon: ShoppingBag },
     { label: "Kurslar Tarixi", href: "/dashboard/history", icon: History },
     { label: "Sertifikatlar", href: "/dashboard/certificates", icon: Award },
     { label: "Chat", href: "/dashboard/chat", icon: MessageCircle },
@@ -28,34 +26,34 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="hidden border-r bg-white lg:block text-gray-800 w-64 flex-shrink-0 flex-col p-4 shadow-2xl"> {/* Changed bg-[#1a232f] to bg-white, text-white to text-gray-800 */}
-      <div className="mb-8 p-2">
-        <Link to="/" className="text-xl font-bold tracking-wider text-primary" relative="path">
+    <aside className="hidden border-r border-cyan-100 bg-white/95 backdrop-blur-xl lg:flex w-72 flex-shrink-0 flex-col p-5 shadow-[0_20px_60px_rgba(26,255,255,0.08)]">
+      <div className="mb-8 rounded-2xl bg-gradient-to-br from-cyan-50 to-white p-4 border border-cyan-100">
+        <Link to="/" className="text-2xl font-extrabold tracking-tight text-primary" relative="path">
           EduDars.uz
         </Link>
-        <p className="text-sm text-gray-500 mt-1 ml-2">Profil menyusi</p> {/* Adjusted styling */}
+        <p className="mt-1 text-sm text-gray-500">Profil menyusi</p>
       </div>
-      
+
       <nav className="flex-grow">
         <div className="space-y-2">
           {navItems.map((item) => (
             <Link
               key={item.href}
               to={item.href}
-              relative="path" // Added relative="path"
-              className={`nav-button-effect ${location.pathname === item.href ? "active" : ""}`}
+              relative="path"
+              className={`flex items-center rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-200 ${location.pathname === item.href ? "bg-primary text-white shadow-md shadow-cyan-200" : "text-gray-700 hover:bg-cyan-50 hover:text-primary"}`}
             >
-              <item.icon className="w-5 h-5 mr-3 ml-2" /> {/* Adjusted margin for icon */}
+              <item.icon className="w-5 h-5 mr-3" />
               <span>{item.label}</span>
             </Link>
           ))}
         </div>
       </nav>
 
-      <div className="mt-auto pt-8 text-center text-xs text-gray-500">
+      <div className="mt-auto rounded-2xl border border-cyan-100 bg-cyan-50/60 p-4 text-center text-xs text-gray-600">
         &copy; {new Date().getFullYear()} EduDars.uz. Barcha huquqlar himoyalangan.
       </div>
-    </div>
+    </aside>
   );
 };
 
