@@ -33,7 +33,7 @@ interface SessionContextType {
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
 
-const LAST_SEEN_UPDATE_INTERVAL = 30 * 1000; // 30 soniya
+const LAST_SEEN_UPDATE_INTERVAL = 30 * 1000;
 
 export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [session, setSession] = useState<SupabaseLikeSession | null>(null);
@@ -45,7 +45,6 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
   const BYPASS_AUTH = import.meta.env.VITE_BYPASS_AUTH === 'true';
 
   const fetchUserProfile = useCallback(async (currentUser: SupabaseLikeUser) => {
-    let fetchedProfile: Profile | null = null;
     const { data, error: fetchError } = await supabase
       .from('profiles')
       .select('id, created_at, username, role, balance, score, phone, bio, total_time_spent_seconds, streak, xp, level, last_checkin_date, last_test_date, last_seen_at')
@@ -78,20 +77,17 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
 
         if (insertError) {
           showError("Profil yaratishda xato yuz berdi.");
-          fetchedProfile = null;
-        } else if (newProfileData) {
-          fetchedProfile = newProfileData as Profile;
+          return null;
         }
-      } else {
-        showError("Profil ma'lumotlarini yuklashda xato yuz berdi.");
-        fetchedProfile = null;
+
+        return newProfileData as Profile;
       }
-    } else if (data) {
-      fetchedProfile = data as Profile;
-    } else {
-      fetchedProfile = null;
+
+      showError("Profil ma'lumotlarini yuklashda xato yuz berdi.");
+      return null;
     }
-    return fetchedProfile;
+
+    return (data as Profile) ?? null;
   }, []);
 
   const refreshProfile = useCallback(async () => {
@@ -101,15 +97,12 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
     }
   }, [user, fetchUserProfile]);
 
-  // Force logout helper
   const logout = useCallback(async () => {
     try {
       await supabase.auth.signOut();
     } catch (e) {
-      // Ignor Auth session missing va boshqa kichik xatolar
       console.error("Supabase signOut error (ignored):", e);
     }
-    // Frontend holatini tozalash
     setSession(null);
     setUser(null);
     setProfile(null);
@@ -143,8 +136,6 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
 
   useEffect(() => {
     if (BYPASS_AUTH) {
-      // Dev-only bypass to quickly test user/admin panels without logging in.
-      // Role auto-switches based on current path.
       const isAdminPath = typeof window !== 'undefined' && window.location.pathname.startsWith('/superadmin');
       const devUser: SupabaseLikeUser = { id: 'dev-user', email: 'dev@edudars.uz' };
       const devSession: SupabaseLikeSession = { access_token: 'dev-token', user: devUser };
@@ -177,10 +168,8 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
       setSession(currentSession);
       const currentUser = currentSession?.user || null;
       setUser(currentUser);
-      let userProfile: Profile | null = null;
 
       if (event === 'SIGNED_OUT') {
-        // Sign out bo'lganda hamma narsani tozalab qo'yamiz
         setProfile(null);
         setIsLoading(false);
         return;
@@ -188,14 +177,15 @@ export const SessionContextProvider: React.FC<{ children: React.ReactNode }> = (
 
       if (currentUser) {
         try {
-          userProfile = await fetchUserProfile(currentUser);
+          const userProfile = await fetchUserProfile(currentUser);
+          setProfile(userProfile);
         } catch (error) {
           console.error("[SessionContext] Error fetching user profile:", error);
           showError("Profil ma'lumotlarini yuklashda kutilmagan xato yuz berdi.");
-          userProfile = null;
+          setProfile(null);
         }
       }
-      setProfile(userProfile);
+
       setIsLoading(false);
     };
 

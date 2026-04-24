@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, XCircle, Phone, User as UserIcon, Loader2, MessageSquare } from 'lucide-react';
+import { CheckCircle2, Phone, User as UserIcon, MessageSquare } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { showSuccess, showError, showLoading, dismissToast } from "@/utils/toast";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
@@ -43,7 +43,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import CustomDeleteButton from '@/components/ui/CustomDeleteButton'; // Import CustomDeleteButton
+import CustomDeleteButton from '@/components/ui/CustomDeleteButton';
 
 interface Application {
   id: string;
@@ -61,9 +61,9 @@ const ApplicationsPanel: React.FC = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isMessageDialogOpen, setIsMessageDialogOpen] = useState(false);
   const [currentMessage, setCurrentMessage] = useState('');
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false); // State for delete dialog
-  const [applicationToDelete, setApplicationToDelete] = useState<Application | null>(null); // State for application to delete
-  const [isDeleting, setIsDeleting] = useState(false); // State for delete loading
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [applicationToDelete, setApplicationToDelete] = useState<Application | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchApplications = useCallback(async () => {
     setIsLoading(true);
@@ -73,9 +73,7 @@ const ApplicationsPanel: React.FC = () => {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
       setApplications(data || []);
     } catch (error: any) {
       console.error("Arizalarni yuklashda xato:", error);
@@ -99,11 +97,10 @@ const ApplicationsPanel: React.FC = () => {
         .update({ status: newStatus })
         .eq('id', applicationId);
 
-      if (error) {
-        throw error;
-      }
-      showSuccess(`Ariza holati muvaffaqiyatli ${newStatus === 'contacted' ? 'bog\'lanildi' : newStatus === 'rejected' ? 'rad etildi' : 'kutilmoqda'} deb yangilandi!`);
-      fetchApplications(); // Refresh the list
+      if (error) throw error;
+
+      showSuccess(`Ariza holati muvaffaqiyatli yangilandi!`);
+      fetchApplications();
     } catch (error: any) {
       console.error("Ariza holatini yangilashda xato:", error);
       showError(`Holatni yangilashda xato: ${error.message || "Noma'lum xato"}`);
@@ -127,7 +124,7 @@ const ApplicationsPanel: React.FC = () => {
     if (!applicationToDelete) return;
 
     setIsDeleting(true);
-    const toastId = showLoading(`"${applicationToDelete.name}" arizasi o'chirilmoqda...`);
+    const toastId = showLoading(`Ariza o'chirilmoqda...`);
 
     try {
       const { error } = await supabase
@@ -135,12 +132,10 @@ const ApplicationsPanel: React.FC = () => {
         .delete()
         .eq('id', applicationToDelete.id);
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
-      showSuccess(`"${applicationToDelete.name}" arizasi muvaffaqiyatli o'chirildi!`);
-      fetchApplications(); // Refresh the list
+      showSuccess(`Ariza muvaffaqiyatli o'chirildi!`);
+      fetchApplications();
       setIsDeleteDialogOpen(false);
       setApplicationToDelete(null);
     } catch (error: any) {
@@ -152,24 +147,24 @@ const ApplicationsPanel: React.FC = () => {
     }
   };
 
-  const getStatusBadgeVariant = (status: Application['status']) => {
+  const getStatusBadgeClass = (status: Application['status']) => {
     switch (status) {
       case 'contacted':
-        return 'bg-green-500 hover:bg-green-600';
+        return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
       case 'rejected':
-        return 'bg-red-500 hover:bg-red-600';
+        return 'bg-rose-50 text-rose-700 border border-rose-200';
       case 'pending':
       default:
-        return 'bg-orange-500 hover:bg-orange-600';
+        return 'bg-amber-50 text-amber-700 border border-amber-200';
     }
   };
 
   if (isLoading) {
     return (
-      <Card className="shadow-lg bg-card text-card-foreground">
+      <Card className="overflow-hidden rounded-3xl border border-cyan-100 bg-white shadow-sm">
         <CardHeader>
-          <CardTitle className="text-2xl font-semibold text-foreground">Arizalar Boshqaruvi</CardTitle>
-          <CardDescription className="text-muted-foreground">Arizalar yuklanmoqda...</CardDescription>
+          <CardTitle className="text-2xl font-bold text-gray-950">Arizalar boshqaruvi</CardTitle>
+          <CardDescription className="text-gray-600">Arizalar yuklanmoqda...</CardDescription>
         </CardHeader>
         <CardContent className="flex items-center justify-center p-6">
           <LoadingSpinner />
@@ -179,66 +174,55 @@ const ApplicationsPanel: React.FC = () => {
   }
 
   return (
-    <Card className="shadow-lg bg-card text-card-foreground">
+    <Card className="overflow-hidden rounded-3xl border border-cyan-100 bg-white shadow-sm">
       <CardHeader>
-        <CardTitle className="text-2xl font-semibold text-foreground">Arizalar Boshqaruvi</CardTitle>
-        <CardDescription className="text-muted-foreground">
-          Foydalanuvchilar tomonidan yuborilgan barcha arizalarni ko'rib chiqing va ularning holatini boshqaring.
-        </CardDescription>
+        <CardTitle className="text-2xl font-bold text-gray-950">Arizalar boshqaruvi</CardTitle>
+        <CardDescription className="text-gray-600">Foydalanuvchi so‘rovlarini ko‘rib chiqing va holatini boshqaring.</CardDescription>
       </CardHeader>
       <CardContent>
         {applications.length === 0 ? (
-          <p className="text-center text-muted-foreground">Hozircha arizalar mavjud emas.</p>
+          <p className="py-10 text-center text-gray-500">Hozircha arizalar mavjud emas.</p>
         ) : (
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-800 hover:bg-gray-700">
-                  <TableHead className="rounded-tl-lg text-gray-100">Ism</TableHead>
-                  <TableHead className="text-gray-100">Telefon</TableHead>
-                  <TableHead className="text-gray-100">Xabar</TableHead>
-                  <TableHead className="text-gray-100">Holat</TableHead>
-                  <TableHead className="text-gray-100">Yuborilgan sana</TableHead>
-                  <TableHead className="rounded-tr-lg text-right text-gray-100">Amallar</TableHead>
+                <TableRow className="bg-slate-50 hover:bg-slate-50">
+                  <TableHead className="text-gray-700">Ism</TableHead>
+                  <TableHead className="text-gray-700">Telefon</TableHead>
+                  <TableHead className="text-gray-700">Xabar</TableHead>
+                  <TableHead className="text-gray-700">Holat</TableHead>
+                  <TableHead className="text-gray-700">Sana</TableHead>
+                  <TableHead className="text-right text-gray-700">Amallar</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {applications.map((application) => (
-                  <TableRow key={application.id} className="hover:bg-red-950 transition duration-150">
-                    <TableCell className="font-medium text-foreground flex items-center gap-2">
+                  <TableRow key={application.id} className="hover:bg-cyan-50/50 transition duration-150">
+                    <TableCell className="font-medium text-gray-900 flex items-center gap-2">
                       <UserIcon className="h-4 w-4 text-gray-500" />
                       {application.name}
                     </TableCell>
-                    <TableCell className="text-muted-foreground flex items-center gap-2">
+                    <TableCell className="text-gray-600 flex items-center gap-2">
                       <Phone className="h-4 w-4 text-gray-500" />
-                      <a href={`tel:${application.phone}`} className="text-blue-400 hover:underline">{application.phone}</a>
+                      <a href={`tel:${application.phone}`} className="text-primary hover:underline">{application.phone}</a>
                     </TableCell>
                     <TableCell>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleViewMessage(application.message)}
-                        className="flex items-center gap-1 text-blue-400 hover:text-blue-500 border-blue-400 hover:border-blue-500"
-                      >
+                      <Button variant="outline" size="sm" onClick={() => handleViewMessage(application.message)} className="flex items-center gap-1 rounded-full border-cyan-200 text-gray-700 hover:bg-cyan-50 hover:text-primary">
                         <MessageSquare className="h-4 w-4" /> Ko'rish
                       </Button>
                     </TableCell>
                     <TableCell>
-                      <Badge className={getStatusBadgeVariant(application.status)}>
-                        {application.status === 'pending' ? 'Kutilmoqda' : application.status === 'contacted' ? 'Bog\'lanildi' : 'Rad etilgan'}
+                      <Badge className={getStatusBadgeClass(application.status)}>
+                        {application.status === 'pending' ? 'Kutilmoqda' : application.status === 'contacted' ? 'Bog' + `'` + 'lanildi' : 'Rad etilgan'}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-muted-foreground">{format(new Date(application.created_at), 'dd.MM.yyyy HH:mm')}</TableCell>
-                    <TableCell className="text-right flex items-center justify-end space-x-2">
-                      <Select
-                        onValueChange={(value: 'pending' | 'contacted' | 'rejected') => handleUpdateApplicationStatus(application.id, value)}
-                        value={application.status}
-                        disabled={isUpdating}
-                      >
-                        <SelectTrigger className="w-[180px] bg-gray-700 text-white border-gray-600 hover:border-gray-500">
-                          <SelectValue placeholder="Holatni o'zgartirish" />
+                    <TableCell className="text-gray-600">{format(new Date(application.created_at), 'dd.MM.yyyy HH:mm')}</TableCell>
+                    <TableCell className="text-right flex items-center justify-end gap-2">
+                      <Select onValueChange={(value: 'pending' | 'contacted' | 'rejected') => handleUpdateApplicationStatus(application.id, value)} value={application.status} disabled={isUpdating}>
+                        <SelectTrigger className="w-[180px] rounded-full border-cyan-200 bg-white text-gray-700">
+                          <SelectValue placeholder="Holat" />
                         </SelectTrigger>
-                        <SelectContent className="bg-gray-800 text-white border-gray-700">
+                        <SelectContent>
                           <SelectItem value="pending">Kutilmoqda</SelectItem>
                           <SelectItem value="contacted">Bog'lanildi</SelectItem>
                           <SelectItem value="rejected">Rad etilgan</SelectItem>
@@ -254,42 +238,34 @@ const ApplicationsPanel: React.FC = () => {
         )}
       </CardContent>
 
-      {/* Message View Dialog */}
       <Dialog open={isMessageDialogOpen} onOpenChange={setIsMessageDialogOpen}>
-        <DialogContent className="sm:max-w-[425px] bg-card text-card-foreground">
+        <DialogContent className="sm:max-w-[425px] rounded-3xl border-cyan-100 bg-white">
           <DialogHeader>
-            <DialogTitle className="text-ferrari-red">Foydalanuvchi Xabari</DialogTitle>
-            <DialogDescription className="text-muted-foreground">
-              Foydalanuvchi tomonidan yuborilgan xabar matni.
-            </DialogDescription>
+            <DialogTitle className="text-gray-950">Foydalanuvchi xabari</DialogTitle>
+            <DialogDescription className="text-gray-600">Foydalanuvchi yuborgan xabar matni.</DialogDescription>
           </DialogHeader>
           <div className="py-4">
-            <p className="text-foreground whitespace-pre-wrap">{currentMessage}</p>
+            <p className="whitespace-pre-wrap text-gray-800">{currentMessage}</p>
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button type="button" variant="outline">Yopish</Button>
+              <Button type="button" variant="outline" className="rounded-full">Yopish</Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Delete Application Confirmation Dialog */}
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <AlertDialogContent className="bg-card text-card-foreground">
+        <AlertDialogContent className="rounded-3xl border-cyan-100 bg-white">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-ferrari-red">Arizani O'chirishni Tasdiqlaysizmi?</AlertDialogTitle>
-            <AlertDialogDescription className="text-muted-foreground">
-              Siz <strong>"{applicationToDelete?.name}"</strong> tomonidan yuborilgan arizani butunlay o'chirib tashlamoqchisiz. Bu amalni qaytarib bo'lmaydi. Ishonchingiz komilmi?
+            <AlertDialogTitle className="text-gray-950">Arizani o'chirishni tasdiqlaysizmi?</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-600">
+              Siz <strong>"{applicationToDelete?.name}"</strong> arizasini butunlay o'chirmoqchisiz. Bu amalni qaytarib bo'lmaydi.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isDeleting}>Bekor qilish</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDeleteApplication}
-              disabled={isDeleting}
-              className="bg-destructive hover:bg-red-700 text-white"
-            >
+            <AlertDialogAction onClick={confirmDeleteApplication} disabled={isDeleting} className="bg-destructive text-white hover:bg-red-700">
               {isDeleting ? "O'chirilmoqda..." : "O'chirish"}
             </AlertDialogAction>
           </AlertDialogFooter>
