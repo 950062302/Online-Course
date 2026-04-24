@@ -18,9 +18,9 @@ import CourseDetailsPage from "./pages/CourseDetailsPage";
 import { SessionContextProvider } from "./components/auth/SessionContextProvider";
 import NotificationDialog from "./components/ui/NotificationDialog";
 import LoadingIndicator from "./components/ui/LoadingIndicator";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { setNotificationHandlers, setLoadingHandlers } from "./utils/toast";
-import ClickSpark from './components/ClickSpark'; // ClickSpark komponentini saqlab qolish
+import ClickSpark from './components/ClickSpark';
 
 const queryClient = new QueryClient();
 
@@ -34,9 +34,10 @@ const App = () => {
 
   const [loadingMessages, setLoadingMessages] = useState<Map<string | number, string>>(new Map());
 
-  // Set handlers for toast utility
-  setNotificationHandlers(setNotification);
-  setLoadingHandlers(setLoadingMessages);
+  useEffect(() => {
+    setNotificationHandlers(setNotification);
+    setLoadingHandlers(setLoadingMessages);
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
